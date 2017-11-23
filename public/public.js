@@ -2,15 +2,15 @@
  * Created by baird on 17/11/23.
  */
 
-
+let crypto = require('crypto');
 module.exports = {
     write(status, data, msg){
         switch (status) {
-            case -1:
+            case -100:
                 msg = '请联络管理员';
                 data = null;
                 break;
-            case 0:
+            case -1:
                 msg = '登录超时';
                 break;
             case 10001:
@@ -24,5 +24,8 @@ module.exports = {
                 break;
         }
         return {status: status, msg: msg, data: data};
-    }
+    },
+    md5(text){
+        return crypto.createHash('md5').update(text + 'momo').digest('hex');
+    },
 }
