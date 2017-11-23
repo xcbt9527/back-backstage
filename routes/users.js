@@ -1,16 +1,16 @@
-var express = require('express');
-var router = express.Router();
-
-/* GET users listing. */
+let express = require('express');
+let router = express.Router();
+let mysqlquery = require('../sql/query');
+let json = require("../public/json");
+const sql = new mysqlquery();
 router.get('/', function (req, res, next) {
     console.log(req.url);
     next();
 });
 router.post('/login', (req, res, next) => {
-    console.log(1);
-    res.json({
-        code: '1',
-        msg: '操作成功'
+
+    sql.findOne('user', {loginname: req.body.username}).then(data => {
+        res.json(json.write(10000, data));
     });
-})
+});
 module.exports = router;
