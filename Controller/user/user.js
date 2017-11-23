@@ -8,13 +8,15 @@ let moment = require("moment");
 const sql = new query();
 module.exports = {
     islogin(req, res, next){
-        if (!req.body.session_store) {
+        let token = req.headers['token'];
+        if (!token) {
             return res.json(public.write(-1, null));
         } else {
-            sql.findOne('user', {session_store: req.body.session_store}).then(data => {
+            sql.findOne('user', {session_store: token}).then(data => {
                 let newdata = Date.parse(new Date(newtime)) / 1000;
                 let lastlogintime = Date.parse(new Date(data.lastlogintime)) / 1000;
-                if ((newdata - lastlogintime) > 100000) {
+                console.log(newdata - lastlogintime);
+                if ((newdata - lastlogintime) > 86400) {
                     res.json(public.write(-1, null));
                 } else {
                     next();
