@@ -46,7 +46,7 @@ module.exports = {
                                 sex: data.sex,
                                 jurisdiction: data.jurisdiction
                             };
-                            res.json(public.write(10000, userlogin));
+                            res.json(public.write(10000, userlogin,'登录成功'));
                         }).catch(msg => {
                             res.json(msg);
                         });
