@@ -4,7 +4,7 @@ import favicon from "serve-favicon";
 import logger from "morgan";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
-import users from "./users/users";
+import users from "../routes/users";
 var app = express();
 // view engine setup
 app.set('dist', path.join(__dirname, 'dist'));

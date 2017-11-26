@@ -5,6 +5,7 @@
 import query from "../../sql/query";
 import plugins from "../../public/public";
 import moment from "moment";
+import {Usermodel} from "../../model/user";
 const sql = new query();
 module.exports = {
     islogin(req, res, next){
@@ -26,7 +27,7 @@ module.exports = {
     },
     login(req, res, next){
         let psd = plugins.md5(req.body.password);
-        sql.findOne('user', {loginname: req.body.username}).then(data => {
+        sql.findOne('user', {loginname: req.body.name}).then(data => {
             if (!data) {
                 res.json(plugins.write(0, null, '没有此人信息'));
             } else {
@@ -35,18 +36,13 @@ module.exports = {
                         res.json(plugins.write(0, null, '账号已冻结，请联系管理员'));
                     } else {
                         let newtime = moment().format('YYYY-MM-DD hh:mm:ss');
-                        let lock = plugins.md5(req.body.username + moment().format('YYYYMMDD'));
+                        let lock = plugins.md5(req.body.name + moment().format('YYYYMMDD'));
                         sql.update('user', {
                             session_store: lock,
                             lastlogintime: newtime
-                        }, {loginname: req.body.username}).then(data1 => {
-                            let userlogin = {
-                                lock: lock,
-                                loginname: data.name,
-                                sex: data.sex,
-                                jurisdiction: data.jurisdiction
-                            };
-                            res.json(plugins.write(10000, userlogin,'登录成功'));
+                        }, {loginname: req.body.name}).then(data1 => {
+                            let userlogin = plugins.hasboj(data, new Usermodel());
+                            res.json(plugins.write(10000, userlogin, '登录成功'));
                         }).catch(msg => {
                             res.json(msg);
                         });

@@ -29,4 +29,31 @@ module.exports = {
     md5(text){
         return crypto.createHash('md5').update(text + 'momo').digest('hex');
     },
+    hasboj(obj1, obj2){
+        if (typeof obj1 == 'object') {  //判断是否对象
+            if (typeof obj1.length == 'number') {   //判断是否数组
+                let arr = [];
+                let obj = {};
+                obj1.forEach(res => {
+                    for (let i in res) {
+                        if (res.hasOwnProperty(i)) {
+                            obj.i = res.i;
+                            arr.push(obj);
+                        }
+                    }
+                })
+                return arr;
+            } else {        //对象
+                for (let i in obj2) {
+                    if (obj1.hasOwnProperty(i)) {
+                        obj2[i] = obj1[i];
+                    }
+                }
+                return obj2;
+            }
+        } else {
+            return false;
+        }
+    }
+
 }
