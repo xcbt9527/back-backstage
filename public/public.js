@@ -2,7 +2,7 @@
  * Created by baird on 17/11/23.
  */
 
-let crypto = require('crypto');
+import crypto from "crypto";
 module.exports = {
     write(status, data, msg){
         switch (status) {

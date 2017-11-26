@@ -1,6 +1,6 @@
-let express = require('express');
+import express from "express";
+import user from "../Controller/user/user";
 let router = express.Router();
-let user = require("../Controller/user/user");
 router.get('/', function (req, res, next) {
     console.log(req.url);
     if (req.url === '/api/user/login') {
