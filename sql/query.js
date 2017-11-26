@@ -39,8 +39,20 @@ class mysqlquery {
     };
 
     //查找所有
-    findall(table, callback) {
-        let sql = "SELECT * FROM " + prefix + table;
+    findall(table, where, callback) {
+        let _WHERE = '';
+        //判断是否对象，如果不是直接执行
+        if (util.isObject(where)) {
+            _WHERE += 'WHERE ';
+            //循环获取查询条件
+            for (let k in where) {
+                _WHERE += k + "='" + where[k] + "' AND ";
+            }
+            _WHERE = _WHERE.slice(0, -4);
+        } else if (typeof where == 'string') {
+            _WHERE = 'WHERE ' + where;
+        }
+        let sql = "SELECT * FROM " + prefix + table + ' ' + _WHERE;
         return new Promise((resolve, reject) => {
             conn.query(sql, function (err, data) {
                 if (err) {

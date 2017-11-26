@@ -9,14 +9,14 @@ import {Usermodel} from "../../model/user";
 const sql = new query();
 module.exports = {
     islogin(req, res, next){
-        let token = req.headers['token'];
+        let token = req.headers['key'];
         if (!token) {
             return res.json(plugins.write(-1, null));
         } else {
             sql.findOne('user', {session_store: token}).then(data => {
+                let newtime = moment().format('YYYY-MM-DD hh:mm:ss');
                 let newdata = Date.parse(new Date(newtime)) / 1000;
                 let lastlogintime = Date.parse(new Date(data.lastlogintime)) / 1000;
-                console.log(newdata - lastlogintime);
                 if ((newdata - lastlogintime) > 86400) {
                     res.json(plugins.write(-1, null));
                 } else {
