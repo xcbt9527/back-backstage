@@ -11,7 +11,7 @@ module.exports = {
     islogin(req, res, next){
         let token = req.headers['key'];
         if (!token) {
-            return res.json(plugins.write(-1, null));
+            res.json(plugins.write(-1, null));
         } else {
             sql.findOne('user', {session_store: token}).then(data => {
                 let newtime = moment().format('YYYY-MM-DD hh:mm:ss');

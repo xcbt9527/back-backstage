@@ -10,8 +10,9 @@ const sql = new query();
 module.exports = {
     articleall(req, res, next){
         sql.findall("Article", {userid: req.body.id}).then(data => {
-            res.json(plugins.write(1, data, null));
-
+            let deleteobj = ['content', 'article_link'];
+            let arr = plugins.objdelete(deleteobj, data);
+            res.json(plugins.write(1, arr, null));
         })
     }
 }

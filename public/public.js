@@ -29,6 +29,7 @@ module.exports = {
     md5(text){
         return crypto.createHash('md5').update(text + 'momo').digest('hex');
     },
+    //替换对象数据，obj为需更改的属性，obj2为数据源
     hasboj(obj1, obj2){
         if (typeof obj1 == 'object') {  //判断是否对象
             if (typeof obj1.length == 'number') {   //判断是否数组
@@ -54,6 +55,50 @@ module.exports = {
         } else {
             return false;
         }
-    }
-
+    },
+    //obj1是删除的字段（必需是对象或者数组），obj2是待删除字段的对象（必需是对象或数组）
+    objdelete(obj1, obj2) {
+        let obj = null;     //返回变量（数组或对象）
+        if (typeof obj1 == 'object') {  //判断是否对象
+            if (typeof obj1.length == 'number') {   //判断是否数组
+                if (typeof obj2 === 'object') {
+                    if (typeof obj2.length == 'number') {   //判断是否数组
+                        obj1.forEach(res => {
+                            obj2.forEach(ret => {
+                                if (ret.hasOwnProperty(res)) {
+                                    delete ret[res];
+                                }
+                            })
+                        })
+                        obj = obj2;
+                    } else {
+                        obj1.forEach(res => {
+                            for (let k in res) {
+                                if (obj2.hasOwnProperty(obj1.k)) {
+                                    delete obj2[res];
+                                }
+                            }
+                        });
+                        obj = obj2;
+                    }
+                } else {
+                    return obj;
+                }
+                return obj;
+            } else {
+                if (typeof obj2.length == 'number') {   //判断是否数组
+                    obj2.forEach(res => {
+                        for (let i in obj1) {
+                            if (res.hasOwnProperty(obj1.i)) {
+                                delete res[i];
+                            }
+                        }
+                    })
+                }
+            }
+            return obj;
+        } else {
+            return obj;
+        }
+    },
 }
