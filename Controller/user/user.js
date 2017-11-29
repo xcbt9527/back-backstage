@@ -13,7 +13,7 @@ module.exports = {
         if (!token) {
             res.json(plugins.write(-1, null));
         } else {
-            sql.findOne('user', {session_store: token}).then(data => {
+            sql.findOne('sys_user', {session_store: token}).then(data => {
                 let newtime = moment().format('YYYY-MM-DD hh:mm:ss');
                 let newdata = Date.parse(new Date(newtime)) / 1000;
                 let lastlogintime = Date.parse(new Date(data.lastlogintime)) / 1000;
@@ -27,7 +27,7 @@ module.exports = {
     },
     login(req, res, next){
         let psd = plugins.md5(req.body.password);
-        sql.findOne('user', {loginname: req.body.name}).then(data => {
+        sql.findOne('sys_user', {loginname: req.body.name}).then(data => {
             if (!data) {
                 res.json(plugins.write(0, null, '没有此人信息'));
             } else {
@@ -37,7 +37,7 @@ module.exports = {
                     } else {
                         let newtime = moment().format('YYYY-MM-DD hh:mm:ss');
                         let lock = plugins.md5(req.body.name + moment().format('YYYYMMDD'));
-                        sql.update('user', {
+                        sql.update('sys_user', {
                             session_store: lock,
                             lastlogintime: newtime
                         }, {loginname: req.body.name}).then(data1 => {
