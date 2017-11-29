@@ -54,5 +54,27 @@ module.exports = {
         }).catch(msg => {
             res.json(msg);
         });
+    },
+    //获取所有系统管理员
+    getAlluser(req, res, next){
+        sql.findall("sys_user").then(data => {
+            res.json(plugins.write(1, data, null));
+        })
+    },
+    //获取所有系统管理员
+    getAlluser(req, res, next){
+        sql.findOne("sys_user", {id: req.body.id}).then(data => {
+            if (data) {
+                res.json(plugins.write(1, data, null));
+            } else {
+                res.json(plugins.write(0, null, '没有此人信息'));
+            }
+        })
+    },
+    //删除
+    DeleteRecord(req, res, next){
+        sql.update("Article", {status: -1}, {id: req.body.id}).then(data => {
+            res.json(plugins.write(1, null, '删除成功'));
+        })
     }
 }
