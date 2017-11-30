@@ -10,17 +10,10 @@ const sql = new query();
 module.exports = {
     //根据作者获取所有文章
     articleall(req, res, next){
-        sql.findall("Article", {userid: req.body.id}).then(data => {
+        sql.findall("Article", {userid: req.body.id}, "AND state>0").then(data => {
             let deleteobj = ['content', 'article_link'];
             let arr = plugins.objdelete(deleteobj, data);
             res.json(plugins.write(1, arr, null));
-        })
-    },
-    //保存
-    SaveRecord(req, res, next){
-        let obj = plugins.hasboj(req.body, new articlemodel());
-        sql.update("Article", obj, {userid: req.body.id}).then(data => {
-            res.json(plugins.write(1, data, null));
         })
     },
     //获取此条文章信息
@@ -33,9 +26,17 @@ module.exports = {
             }
         })
     },
+    //保存
+    SaveRecord(req, res, next){
+        sql.update("Article", req.body, {id: req.body.id}).then(data => {
+            console.log(data);
+            res.json(plugins.write(1, data, null));
+        })
+    },
+
     //删除
     delectRecord(req, res, next){
-        sql.update("Article", {status: -1}, {id: req.body.id}).then(data => {
+        sql.update("Article", {state: -1}, {id: req.body.id}).then(data => {
             res.json(plugins.write(1, null, '删除成功'));
         })
     }

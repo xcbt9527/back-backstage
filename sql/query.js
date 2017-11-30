@@ -12,7 +12,7 @@ class mysqlquery {
     //使用的是Promise异步返回
 
     //查找一条；
-    findOne(table, where, callback) {
+    findOne(table, where) {
         // whre is arr; [{id:1},{username:admin}];
         let _WHERE = '';
         //判断是否对象，如果不是直接执行
@@ -39,8 +39,9 @@ class mysqlquery {
     };
 
     //查找所有
-    findall(table, where, callback) {
+    findall(table, where, or) {
         let _WHERE = '';
+        console.log(where);
         //判断是否对象，如果不是直接执行
         if (util.isObject(where)) {
             _WHERE += 'WHERE ';
@@ -52,7 +53,8 @@ class mysqlquery {
         } else if (typeof where == 'string') {
             _WHERE = 'WHERE ' + where;
         }
-        let sql = "SELECT * FROM " + prefix + table + ' ' + _WHERE;
+        let sql = "SELECT * FROM " + prefix + table + ' ' + _WHERE + or;
+        console.log(sql);
         return new Promise((resolve, reject) => {
             conn.query(sql, function (err, data) {
                 if (err) {
@@ -87,6 +89,7 @@ class mysqlquery {
             _WHERE = 'WHERE ' + where;
         }
         let sql = "UPDATE " + prefix + table + ' SET ' + _SETS + ' ' + _WHERE;
+        console.log(sql);
         return new Promise((resolve, reject) => {
             conn.query(sql, function (err, data) {
                 if (err) {

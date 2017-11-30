@@ -8,4 +8,18 @@ let router = express.Router();
 router.post('/articleall', (req, res, next) => {
     article.articleall(req, res, next);
 });
+//获取单条文章
+router.post('/getRecord', (req, res, next) => {
+    article.getRecord(req, res, next);
+});
+
+//保存文章
+router.post('/SaveRecord', (req, res, next) => {
+    article.SaveRecord(req, res, next);
+});
+
+//删除文章
+router.post('/delectRecord', (req, res, next) => {
+    article.delectRecord(req, res, next);
+});
 module.exports = router;

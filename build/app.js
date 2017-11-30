@@ -22,6 +22,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'dist'), { maxAge: 1000 * 60 * 60 }));
 app.use(function (req, res, next) {
+    console.log(req.url);
     if (req.url === '/api/user/login') {
         next();
     }
