@@ -8,7 +8,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var users = require('./routes/users');
-var article = require('./routes/article');
+var shops = require('./routes/shop');
 var user_js_1 = require("./Controller/user/user.js");
 var app = express();
 // view engine setup
@@ -32,7 +32,7 @@ app.use(function (req, res, next) {
     }
 });
 app.use('/api/user/', users); //用户表
-app.use('/api/article/', article); //文章表
+app.use('/api/shop/', shops); //用户表
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     var err = new Error('Not Found');

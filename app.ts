@@ -7,8 +7,9 @@ let bodyParser = require('body-parser');
 
 let index = require('./routes/index');
 let users = require('./routes/users');
-let article = require('./routes/article');
+let shops = require('./routes/shop');
 import user from "./Controller/user/user.js";
+import shop from "./Controller/shop/shop.js";
 let app = express();
 
 // view engine setup
@@ -32,7 +33,7 @@ app.use(function (req, res, next) {
     }
 });
 app.use('/api/user/', users);   //用户表
-app.use('/api/article/', article);    //文章表
+app.use('/api/shop/', shops);   //用户表
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
