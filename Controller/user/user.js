@@ -64,6 +64,7 @@ module.exports = {
     },
     //获取所有系统管理员
     getuser(req, res, next){
+        //SELECT * FROM shop.sys_user where name = 'momo'
         sql.findOne("sys_user", {AutoId: req.body.AutoId}).then(data => {
             if (data) {
                 let userlogin = plugins.hasboj(data, new Usermodel());
@@ -97,6 +98,22 @@ module.exports = {
         sql.update("sys_user", {state: 0}, {password: psd}).then(data => {
             res.json(plugins.write(1, null, '密码修改成功'));
         });
+    },
+    /**
+     * 注册
+     * @param req
+     * @param res
+     * @param next
+     */
+    register(req, res, next){
+        let psd = plugins.md5(req.body.password);
+        sql.adddate('sys_user', {
+            name: req.body.name,
+            state: 1,
+            password: psd
+        }).then(data => {
+            res.json(plugins.write(1, null, '新增成功'));
+        })
     },
     /**
      * 保存

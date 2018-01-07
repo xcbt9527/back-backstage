@@ -48,6 +48,7 @@ class mysqlquery {
             _WHERE = 'WHERE ' + where;
         }
         let sql = "SELECT * FROM " + prefix + table + ' ' + _WHERE + ' LIMIT 1';
+        //异步请求
         return new Promise((resolve, reject) => {
             conn.query(sql, function (err, data) {
                 if (err) {
@@ -132,6 +133,13 @@ class mysqlquery {
         })
     };
 
+    /**
+     * 新增信息
+     * @param table
+     * @param sets
+     * @param where
+     * @returns {Promise}
+     */
     adddate(table, sets, where) {
         let _SETS = ''; //需要更改的
         let _WHERE = '';//更改条件

@@ -16,4 +16,7 @@ router.post('/DeleteRecord', (req, res, next) => {
 router.post('/ModifyRecord', (req, res, next) => {
     user.ModifyRecord(req, res, next);
 });
+router.post('/register', (req, res, next) => {
+    user.register(req, res, next);
+});
 module.exports = router;
