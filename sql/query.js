@@ -51,6 +51,7 @@ class mysqlquery {
         //异步请求
         return new Promise((resolve, reject) => {
             conn.query(sql, function (err, data) {
+                console.log(err);
                 if (err) {
                     reject(json.write(-1, null));
                 } else {
@@ -145,7 +146,7 @@ class mysqlquery {
         let _WHERE = '';//更改条件
         //循环获取更改条件
         for (let k in sets) {
-            _SETS += k  + ",";
+            _SETS += k + ",";
         }
         _SETS = _SETS.slice(0, -1);
         //判断是否对象，不是直接插入

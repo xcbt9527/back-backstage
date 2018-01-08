@@ -9,6 +9,7 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var users = require('./routes/users');
 var shops = require('./routes/shop');
+var carts = require('./routes/cart');
 var user_js_1 = require("./Controller/user/user.js");
 var app = express();
 // view engine setup
@@ -24,7 +25,6 @@ app.use(express.static(path.join(__dirname, 'dist'), { maxAge: 1000 * 60 * 60 })
 app.use(function (req, res, next) {
     console.log(req.url);
     if (req.url === '/api/user/login' || req.url === '/api/user/register') {
-        console.log("1111111");
         next();
     }
     else {
@@ -34,6 +34,7 @@ app.use(function (req, res, next) {
 });
 app.use('/api/user/', users); //用户表
 app.use('/api/shop/', shops); //商品表
+app.use('/api/cart/', carts); //购物车
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     var err = new Error('Not Found');
