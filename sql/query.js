@@ -141,7 +141,7 @@ class mysqlquery {
      * @param where
      * @returns {Promise}
      */
-    adddate(table, sets, where) {
+    adddate(table, sets) {
         let _SETS = ''; //需要更改的
         let _WHERE = '';//更改条件
         //循环获取更改条件
@@ -155,6 +155,43 @@ class mysqlquery {
         }
         _WHERE = _WHERE.slice(0, -1);
         let sql = "INSERT INTO " + prefix + table + '(' + _SETS + ')' + 'VALUES' + '(' + _WHERE + ')';
+        return new Promise((resolve, reject) => {
+            conn.query(sql, function (err, data) {
+                if (err) {
+                    reject(json.write(-1, null));
+                } else {
+                    resolve(data);
+                }
+            });
+        })
+    };
+
+    /**
+     * 多条件查询 where name in()
+     * @param table
+     * @param sets
+     * @returns {Promise}
+     */
+    findmore(table, sets) {
+        let _SETS = ''; //需要更改的
+        let _WHERE = '';//更改条件
+        //循环获取更改条件
+        for (let k in sets) {
+            _SETS += k + ",";
+        }
+        _SETS = _SETS.slice(0, -1);
+        //判断是否对象，不是直接插入
+        for (let k in sets) {
+            if (sets[k] instanceof Array) {
+                sets[k].forEach(res => {
+                    _WHERE += '"' + res + '"' + ",";
+                })
+                _WHERE = _WHERE.slice(0, -1);
+            } else {
+                _WHERE = sets[k];
+            }
+        }
+        let sql = "SELECT * FROM " + prefix + table + 'where' + _SETS + 'in' + '(' + _WHERE + ')';
         return new Promise((resolve, reject) => {
             conn.query(sql, function (err, data) {
                 if (err) {

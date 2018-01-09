@@ -18,9 +18,24 @@ module.exports = {
      * @param next
      */
     getAllCart(req, res, next){
-        sql.findall("cart").then(data => {
-            let userlogin = plugins.objdelete(['password', 'token'], data);
-            res.json(plugins.write(1, userlogin, null));
+        if (req.body.basicinfoId < 0 || req.body.basicinfoId) {
+            res.json(plugins.write(0, null, '人不能为空'));
+            return;
+        }
+        sql.findall("cart", {basicinfoId: req.body.basicinfoId}).then(data => {
+            let model = {AutoId: []};
+            if (data.length > 0) {
+                data.forEach(res => {
+                    if (res.status > 0) {
+                        model.AutoId.push(res.shopId);
+                    }
+                })
+                sql.findmore('shop', model).then(shop => {
+                    res.json(plugins.write(10001, shop, null));
+                })
+            } else {
+                res.json(plugins.write(10001, null, null));
+            }
         })
     },
     /**
@@ -33,10 +48,11 @@ module.exports = {
         //SELECT * FROM shop.sys_user where name = 'momo'
         sql.findOne("cart", {AutoId: req.body.AutoId}).then(data => {
             if (data) {
-                let userlogin = plugins.hasboj(data, new cartmodel());
-                res.json(plugins.write(1, userlogin, null));
+                sql.findOne('shop', {AutoId: data[0].shopId}).then(shopdata => {
+                    res.json(plugins.write(1, shopdata, null));
+                })
             } else {
-                res.json(plugins.write(0, null, '没有此人信息'));
+                res.json(plugins.write(0, null, '购物车内无此条商品'));
             }
         })
     },
@@ -49,7 +65,7 @@ module.exports = {
      */
     DelectCart(req, res, next){
         sql.update("cart", {state: 0}, {AutoId: req.body.AutoId}).then(data => {
-            res.json(plugins.write(1, null, '添加购物车'));
+            res.json(plugins.write(1, null, '删除成功'));
         })
     },
     /**
@@ -60,19 +76,19 @@ module.exports = {
      * @constructor
      */
     SaveCart(req, res, next){
-        let psd = plugins.md5(req.body.password);
         if (req.body.AutoId < 1) {
             sql.adddate('cart', {
-                name: req.body.name,
-                state: req.body.state,
-                password: psd
+                basicinfoId: req.body.basicinfoId,
+                state: 1,
+                shopId: req.body.shopId,
+                num: req.body.num,
+                lastmodifytime: moment().format('YYYY-MM-DD hh:mm:ss')
             }).then(data => {
                 res.json(plugins.write(1, null, '新增成功'));
             })
         } else {
             sql.update("cart", {
-                name: req.body.name,
-                state: req.body.state
+                num: req.body.num
             }, {AutoId: req.body.AutoId}).then(data => {
                 res.json(plugins.write(1, null, '修改成功'));
             })
