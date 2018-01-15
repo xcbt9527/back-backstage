@@ -3,6 +3,8 @@
  */
 
 import crypto from "crypto";
+import fs from "fs";
+import path from "path";
 module.exports = {
     write(status, data, msg){
         switch (status) {
@@ -26,8 +28,21 @@ module.exports = {
         }
         return {status: status, msg: msg, data: data};
     },
+    /**
+     * MD5加密
+     * @param text
+     * @returns {*}
+     */
     md5(text){
         return crypto.createHash('md5').update(text + 'momo').digest('hex');
+    },
+    /**
+     * 解密
+     * @param text
+     * @returns {*}
+     */
+    md5_unlock(text){
+        return crypto.createHash('md5').update(text + 'momo', 'utf8').digest('hex');
     },
     //替换对象数据，obj为需更改的属性，obj2为数据源
     hasboj(obj1, obj2){
@@ -101,4 +116,46 @@ module.exports = {
             return obj;
         }
     },
+    /**
+     * 上传图片
+     * 目录路径，照片名称，上传图片地址
+     * @param dir
+     * @param name
+     * @param img
+     */
+    upload(dir, name, img){
+        let vm = this;
+        let base64Data = img.replace(/^data:image\/\w+;base64,/, "");
+        base64Data = base64Data.replace(/\s/g, "+");
+        let dataBuffer = new Buffer(base64Data, 'base64');
+        let src = path.resolve('img');
+        let savedir = src + '/' + dir + '/';
+        let dirList = fs.readdirSync(src);
+        let fileNamehas = true;
+        dirList.forEach(function (fileName) {
+            if (fileName === dir) {
+                fileNamehas = false;
+            }
+        });
+        if (fileNamehas) {
+            fs.mkdirSync(src + '/' + dir);
+        }
+        return new Promise((resolve, reject) => {
+            if (img) {
+                fs.writeFile(savedir + name + ".png", dataBuffer, function (err) {
+                    if (!err) {
+                        resolve(vm.md5(dir + '/' + name + '.png'));
+                    } else {
+                        resolve(null);
+                    }
+                });
+            } else {
+                resolve(null);
+            }
+        })
+    },
+
+    getImg(date){
+        return this.md5_unlock(date);
+    }
 }

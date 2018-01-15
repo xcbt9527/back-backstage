@@ -10,7 +10,6 @@ let users = require('./routes/users');
 let shops = require('./routes/shop');
 let carts = require('./routes/cart');
 import user from "./Controller/user/user.js";
-import shop from "./Controller/shop/shop.js";
 let app = express();
 
 // view engine setup
@@ -25,9 +24,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'dist'), {maxAge: 1000 * 60 * 60}));
 app.use(function (req, res, next) {
-    console.log(req.url);
     if (req.url === '/api/user/login' || req.url === '/api/user/register') {
-        console.log("1111111");
         next();
     } else {
         //验证是否已登录
@@ -36,7 +33,7 @@ app.use(function (req, res, next) {
 });
 app.use('/api/user/', users);   //用户表
 app.use('/api/shop/', shops);   //商品表
-app.use('/api/shop/', carts);   //购物车
+app.use('/api/cart/', carts);   //购物车
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

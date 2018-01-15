@@ -14,13 +14,10 @@ module.exports = {
             res.json(plugins.write(-1, null));
         } else {
             sql.findOne('sys_user', {token: token}).then(data => {
-                let newtime = moment().format('YYYY-MM-DD hh:mm:ss');
-                let newdata = Date.parse(new Date(newtime)) / 1000;
-                let lastlogintime = Date.parse(new Date(data.lastlogintime)) / 1000;
-                if ((newdata - lastlogintime) > 86400) {
-                    res.json(plugins.write(-1, null));
-                } else {
+                if(!data){
                     next();
+                }else{
+                    res.json(plugins.write(-1, null));
                 }
             })
         }

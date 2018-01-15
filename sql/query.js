@@ -51,7 +51,6 @@ class mysqlquery {
         //异步请求
         return new Promise((resolve, reject) => {
             conn.query(sql, function (err, data) {
-                console.log(err);
                 if (err) {
                     reject(json.write(-1, null));
                 } else {
