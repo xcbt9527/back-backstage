@@ -148,11 +148,16 @@ module.exports = {
     },
     /**
      * 获取图片
-     * @param host  //本机地址
-     * @param date  //绝对路径
+     * @param url  //绝对路径
      * @returns {string}
      */
-    getImg(host, date){
-        return 'http://' + host + '/' + date;
-    }
+    getImg(url){
+        let filePath = path.resolve('img/' + url);
+        let data = fs.readFileSync(filePath);       //获取本地路径图片
+        console.log(data);
+        let base64 = 'data:image/png;base64,';
+        base64 += new Buffer(data).toString('base64');
+        console.log(base64);
+        return base64;
+    },
 }

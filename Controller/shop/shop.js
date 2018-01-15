@@ -16,6 +16,12 @@ module.exports = {
      */
     getAllshop(req, res, next){
         sql.findall("shop").then(data => {
+            data = data.map(e => {
+                return Object.assign({}, e, {
+                    picture: plugins.getImg(res.picture),
+                    details: plugins.getImg(res.picture)
+                });
+            });
             res.json(plugins.write(1, data, null));
         })
     },
