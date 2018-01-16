@@ -6,7 +6,7 @@ import crypto from "crypto";
 import fs from "fs";
 import path from "path";
 module.exports = {
-    write(status, data, msg){
+    write(status, data, msg) {
         switch (status) {
             case -100:
                 msg = '请联络管理员';
@@ -26,18 +26,18 @@ module.exports = {
                 msg = '登录成功';
                 break;
         }
-        return {status: status, msg: msg, data: data};
+        return { status: status, msg: msg, data: data };
     },
     /**
      * MD5加密
      * @param text
      * @returns {*}
      */
-    md5(text){
+    md5(text) {
         return crypto.createHash('md5').update(text + 'momo').digest('hex');
     },
     //替换对象数据，obj为需更改的属性，obj2为数据源
-    hasboj(obj1, obj2){
+    hasboj(obj1, obj2) {
         if (typeof obj1 == 'object') {  //判断是否对象
             if (typeof obj1.length == 'number') {   //判断是否数组
                 let arr = [];
@@ -115,7 +115,7 @@ module.exports = {
      * @param name
      * @param img
      */
-    upload(dir, name, img){
+    upload(dir, name, img) {
         let vm = this;
         let base64Data = img.replace(/^data:image\/\w+;base64,/, "");
         base64Data = base64Data.replace(/\s/g, "+");
@@ -151,13 +151,32 @@ module.exports = {
      * @param url  //绝对路径
      * @returns {string}
      */
-    getImg(url){
+    getImg(url) {
         let filePath = path.resolve('img/' + url);
         let data = fs.readFileSync(filePath);       //获取本地路径图片
-        console.log(data);
         let base64 = 'data:image/png;base64,';
         base64 += new Buffer(data).toString('base64');
-        console.log(base64);
         return base64;
     },
+    /**
+     * 删除图片
+     * @param {*相对路径地址（img下面的文件夹）} url 
+     * @returns {boolean}
+     */
+    rmdirImg(url) {
+        let filePath = path.resolve('img/' + url);
+
+        return new Promise((resolve, reject) => {
+            fs.rmFile(filePath, (err) => {
+                console.log(err);
+                console.log(filePath);
+                if (err) {
+                    resolve(false);
+                } else {
+                    resolve(true);
+                }
+            })
+        })
+
+    }
 }

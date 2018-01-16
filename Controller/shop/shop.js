@@ -5,7 +5,7 @@
 import query from "../../sql/query";
 import plugins from "../../public/public";
 import moment from "moment";
-import {shopmodel} from "../../model/shop";
+import { shopmodel } from "../../model/shop";
 const sql = new query();
 module.exports = {
     /**
@@ -14,13 +14,11 @@ module.exports = {
      * @param res
      * @param next
      */
-    getAllshop(req, res, next){
+    getAllshop(req, res, next) {
         sql.findall("shop").then(data => {
-            data = data.map(e => {
-                return Object.assign({}, e, {
-                    picture: plugins.getImg(res.picture),
-                    details: plugins.getImg(res.picture)
-                });
+            data.forEach(e => {
+                e.details = plugins.getImg(e.details);
+                e.picture = plugins.getImg(e.picture);
             });
             res.json(plugins.write(1, data, null));
         })
@@ -31,8 +29,8 @@ module.exports = {
      * @param res
      * @param next
      */
-    getshop(req, res, next){
-        sql.findOne("shop", {AutoId: req.body.AutoId}).then(data => {
+    getshop(req, res, next) {
+        sql.findOne("shop", { AutoId: req.body.AutoId }).then(data => {
             if (data) {
                 let userlogin = plugins.hasboj(data, new shopmodel());
                 res.json(plugins.write(1, userlogin, null));
@@ -48,8 +46,8 @@ module.exports = {
      * @param next
      * @constructor
      */
-    DeleteRecord(req, res, next){
-        sql.update("shop", {state: 0}, {AutoId: req.body.AutoId}).then(data => {
+    DeleteRecord(req, res, next) {
+        sql.update("shop", { state: 0 }, { AutoId: req.body.AutoId }).then(data => {
             res.json(plugins.write(1, null, '更改状态成功'));
         })
     },
@@ -60,14 +58,13 @@ module.exports = {
      * @param next
      * @constructor
      */
-    SaveRecord(req, res, next){
+    SaveRecord(req, res, next) {
         let newtime = moment().format('YYYY-MM-DD hh:mm:ss');
         let imgname = plugins.md5(newtime + 'picture');
         let imgname1 = plugins.md5(newtime + 'details');
         let picture = plugins.upload('shop', imgname, req.body.picture);
         let details = plugins.upload('shop', imgname1, req.body.details);
         Promise.all([picture, details]).then(values => {
-            console.log(values);
             if (req.body.AutoId < 1) {
                 sql.adddate('shop', {
                     title: req.body.title,
@@ -79,14 +76,26 @@ module.exports = {
                     res.json(plugins.write(1, null, '新增成功'));
                 })
             } else {
-                sql.update("shop", {
-                    title: req.body.title,
-                    picture: values[0],
-                    details: values[1],
-                    state: req.body.state,
-                    lastmodifytime: newtime
-                }, {AutoId: req.body.AutoId}).then(data => {
-                    res.json(plugins.write(1, null, '修改成功'));
+                sql.findOne("shop", { AutoId: req.body.AutoId }).then(res => {
+                    console.log(res);
+                    let rmpicture = plugins.rmdirImg(res.picture);
+                    let rmdetails = plugins.rmdirImg(res.details);
+                    Promise.all([rmpicture, rmdetails]).then(pics => {
+                        console.log(pics);
+                        if (pics[0] && rmdetails[1]) {
+                            sql.update("shop", {
+                                title: req.body.title,
+                                picture: values[0],
+                                details: values[1],
+                                state: req.body.state,
+                                lastmodifytime: newtime
+                            }, { AutoId: req.body.AutoId }).then(data => {
+                                res.json(plugins.write(1, null, '修改成功'));
+                            })
+                        } else {
+                            res.json(plugins.write(0, null, '保存失败'));
+                        }
+                    })
                 })
             }
         });
