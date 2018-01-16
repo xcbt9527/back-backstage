@@ -36,14 +36,6 @@ module.exports = {
     md5(text){
         return crypto.createHash('md5').update(text + 'momo').digest('hex');
     },
-    /**
-     * 解密
-     * @param text
-     * @returns {*}
-     */
-    md5_unlock(text){
-        return crypto.createHash('md5').update(text + 'momo', 'utf8').digest('hex');
-    },
     //替换对象数据，obj为需更改的属性，obj2为数据源
     hasboj(obj1, obj2){
         if (typeof obj1 == 'object') {  //判断是否对象
@@ -144,7 +136,7 @@ module.exports = {
             if (img) {
                 fs.writeFile(savedir + name + ".png", dataBuffer, function (err) {
                     if (!err) {
-                        resolve(vm.md5(dir + '/' + name + '.png'));
+                        resolve(dir + '/' + name + '.png');
                     } else {
                         resolve(null);
                     }
@@ -154,8 +146,18 @@ module.exports = {
             }
         })
     },
-
-    getImg(date){
-        return this.md5_unlock(date);
-    }
+    /**
+     * 获取图片
+     * @param url  //绝对路径
+     * @returns {string}
+     */
+    getImg(url){
+        let filePath = path.resolve('img/' + url);
+        let data = fs.readFileSync(filePath);       //获取本地路径图片
+        console.log(data);
+        let base64 = 'data:image/png;base64,';
+        base64 += new Buffer(data).toString('base64');
+        console.log(base64);
+        return base64;
+    },
 }
