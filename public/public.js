@@ -153,7 +153,7 @@ module.exports = {
      */
     getImg(url) {
         let filePath = path.resolve('img/' + url);
-        let data = fs.readFileSync(filePath);       //获取本地路径图片
+        let data = fs.readFileSync(filePath);       //获取本地路径图片  
         let base64 = 'data:image/png;base64,';
         base64 += new Buffer(data).toString('base64');
         return base64;
@@ -167,9 +167,7 @@ module.exports = {
         let filePath = path.resolve('img/' + url);
 
         return new Promise((resolve, reject) => {
-            fs.rmFile(filePath, (err) => {
-                console.log(err);
-                console.log(filePath);
+            fs.unlink(filePath, (err) => {
                 if (err) {
                     resolve(false);
                 } else {
