@@ -17,7 +17,7 @@ module.exports = {
     getAllshop(req, res, next) {
         sql.findall("shop").then(data => {
             data.forEach(e => {
-                e.details = plugins.getImg(e.details);
+                console.log(e);
                 e.picture = plugins.getImg(e.picture);
             });
             res.json(plugins.write(1, data, null));
@@ -63,40 +63,28 @@ module.exports = {
         let imgname = plugins.md5(newtime + 'picture');
         let imgname1 = plugins.md5(newtime + 'details');
         let picture = plugins.upload('shop', imgname, req.body.picture);
-        let details = plugins.upload('shop', imgname1, req.body.details);
-        Promise.all([picture, details]).then(values => {
+        plugins.upload('shop', imgname, req.body.picture).then(upload => {
             if (req.body.AutoId < 1) {
                 sql.adddate('shop', {
                     title: req.body.title,
-                    picture: values[0],
-                    details: values[1],
+                    picture: upload,
+                    details: req.body.details,
                     state: 1,
                     lastmodifytime: newtime
                 }).then(data => {
                     res.json(plugins.write(1, null, '新增成功'));
                 })
             } else {
-                sql.findOne("shop", { AutoId: req.body.AutoId }).then(res => {
-                    console.log(res);
-                    let rmpicture = plugins.rmdirImg(res.picture);
-                    let rmdetails = plugins.rmdirImg(res.details);
-                    Promise.all([rmpicture, rmdetails]).then(pics => {
-                        if (pics[0] && rmdetails[1]) {
-                            sql.update("shop", {
-                                title: req.body.title,
-                                picture: values[0],
-                                details: values[1],
-                                state: req.body.state,
-                                lastmodifytime: newtime
-                            }, { AutoId: req.body.AutoId }).then(data => {
-                                res.json(plugins.write(1, null, '修改成功'));
-                            })
-                        } else {
-                            res.json(plugins.write(0, null, '保存失败'));
-                        }
-                    })
+                sql.update("shop", {
+                    title: req.body.title,
+                    picture: upload,
+                    details: req.body.details,
+                    state: req.body.state,
+                    lastmodifytime: newtime
+                }, { AutoId: req.body.AutoId }).then(data => {
+                    res.json(plugins.write(1, null, '修改成功'));
                 })
             }
-        });
+        })
     }
 }
