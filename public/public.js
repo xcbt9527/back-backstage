@@ -6,6 +6,12 @@ import crypto from "crypto";
 import fs from "fs";
 import path from "path";
 module.exports = {
+    /**
+     * 输出状态
+     * @param {*状态} status 
+     * @param {*输出的data数据} data 
+     * @param {*提醒信息} msg 
+     */
     write(status, data, msg) {
         switch (status) {
             case -100:
@@ -36,7 +42,11 @@ module.exports = {
     md5(text) {
         return crypto.createHash('md5').update(text + 'momo').digest('hex');
     },
-    //替换对象数据，obj为需更改的属性，obj2为数据源
+    /**
+     * 替换对象数据
+     * @param {*需删除对象：Obj or Arr} obj1 
+     * @param {*原始对象：Obj or Arr} obj2 
+     */
     hasboj(obj1, obj2) {
         if (typeof obj1 == 'object') {  //判断是否对象
             if (typeof obj1.length == 'number') {   //判断是否数组
@@ -63,7 +73,11 @@ module.exports = {
             return false;
         }
     },
-    //obj1是删除的字段（必需是对象或者数组），obj2是待删除字段的对象（必需是对象或数组）
+    /**
+     * 删除不必要字段
+     * @param {*需删除对象：Obj or Arr} obj1 
+     * @param {*原始对象：Obj or Arr} obj2 
+     */
     objdelete(obj1, obj2) {
         let obj = null;     //返回变量（数组或对象）
         if (typeof obj1 == 'object') {  //判断是否对象
