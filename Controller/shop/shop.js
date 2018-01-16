@@ -81,7 +81,6 @@ module.exports = {
                     let rmpicture = plugins.rmdirImg(res.picture);
                     let rmdetails = plugins.rmdirImg(res.details);
                     Promise.all([rmpicture, rmdetails]).then(pics => {
-                        console.log(pics);
                         if (pics[0] && rmdetails[1]) {
                             sql.update("shop", {
                                 title: req.body.title,
