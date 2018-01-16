@@ -17,7 +17,6 @@ module.exports = {
     getAllshop(req, res, next) {
         sql.findall("shop").then(data => {
             data.forEach(e => {
-                console.log(e);
                 e.picture = plugins.getImg(e.picture);
             });
             res.json(plugins.write(1, data, null));

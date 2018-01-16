@@ -152,11 +152,15 @@ module.exports = {
      * @returns {string}
      */
     getImg(url) {
-        let filePath = path.resolve('img/' + url);
-        let data = fs.readFileSync(filePath);       //获取本地路径图片  
-        let base64 = 'data:image/png;base64,';
-        base64 += new Buffer(data).toString('base64');
-        return base64;
+        if (url) {
+            let filePath = path.resolve('img/' + url);
+            let data = fs.readFileSync(filePath);       //获取本地路径图片  
+            let base64 = 'data:image/png;base64,';
+            base64 += new Buffer(data).toString('base64');
+            return base64;
+        } else {
+            return null;
+        }
     },
     /**
      * 删除图片
