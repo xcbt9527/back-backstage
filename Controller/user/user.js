@@ -27,11 +27,11 @@ module.exports = {
         let psd = plugins.md5(req.body.password);
         sql.findOne('sys_user', { name: req.body.name }).then(data => {
             if (!data) {
-                res.json(plugins.write(0, null, '没有此人信息'));
+                res.json(plugins.write(1, null, '没有此人信息'));
             } else {
                 if (psd === data.password) {
                     if (data.state === -1) {
-                        res.json(plugins.write(0, null, '账号已冻结，请联系管理员'));
+                        res.json(plugins.write(1, null, '账号已冻结，请联系管理员'));
                     } else {
                         let newtime = moment().format('YYYY-MM-DD hh:mm:ss');
                         let lock = plugins.md5(req.body.name + moment().format('YYYYMMDD'));
@@ -46,7 +46,7 @@ module.exports = {
                         });
                     }
                 } else {
-                    res.json(plugins.write(0, null, '密码错误'));
+                    res.json(plugins.write(1, null, '密码错误'));
                 }
             }
         }).catch(msg => {
@@ -57,7 +57,7 @@ module.exports = {
     getAlluser(req, res, next) {
         sql.findall("sys_user").then(data => {
             let userlogin = plugins.objdelete(['password', 'token'], data);
-            res.json(plugins.write(1, userlogin, null));
+            res.json(plugins.write(0, userlogin, null));
         })
     },
     //获取所有系统管理员
@@ -66,9 +66,9 @@ module.exports = {
         sql.findOne("sys_user", { AutoId: req.body.AutoId }).then(data => {
             if (data) {
                 let userlogin = plugins.hasboj(data, new Usermodel());
-                res.json(plugins.write(1, userlogin, null));
+                res.json(plugins.write(0, userlogin, null));
             } else {
-                res.json(plugins.write(0, null, '没有此人信息'));
+                res.json(plugins.write(1, null, '没有此人信息'));
             }
         })
     },

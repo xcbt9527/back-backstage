@@ -201,7 +201,6 @@ module.exports = {
      * @param {*树结构上级ID} upperlevel 
      */
     getTree(data, level, upperlevel) {
-        console.log(level);
         let map = {};
         let val = [];
         data.forEach((item) => {

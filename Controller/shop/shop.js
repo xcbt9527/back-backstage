@@ -19,7 +19,7 @@ module.exports = {
             data.forEach(e => {
                 e.picture = plugins.getImg(e.picture);
             });
-            res.json(plugins.write(1, data, null));
+            res.json(plugins.write(0, data, null));
         })
     },
     /**
@@ -32,9 +32,9 @@ module.exports = {
         sql.findOne("shop", { AutoId: req.body.AutoId }).then(data => {
             if (data) {
                 let userlogin = plugins.hasboj(data, new shopmodel());
-                res.json(plugins.write(1, userlogin, null));
+                res.json(plugins.write(0, userlogin, null));
             } else {
-                res.json(plugins.write(0, null, '没有此人信息'));
+                res.json(plugins.write(1, null, '没有此人信息'));
             }
         })
     },
