@@ -5,26 +5,27 @@
 import query from "../../sql/query";
 import plugins from "../../public/public";
 import moment from "moment";
-import {Usermodel} from "../../model/user";
+import { Usermodel } from "../../model/user";
 const sql = new query();
 module.exports = {
-    islogin(req, res, next){
+    islogin(req, res, next) {
         let token = req.headers['key'];
         if (!token) {
             res.json(plugins.write(-1, null));
         } else {
-            sql.findOne('sys_user', {token: token}).then(data => {
-                if(!data){
+            sql.findOne('sys_user', { token: token }).then(data => {
+                if (data) {
+                    req.body.account = data.AutoId;
                     next();
-                }else{
+                } else {
                     res.json(plugins.write(-1, null));
                 }
             })
         }
     },
-    login(req, res, next){
+    login(req, res, next) {
         let psd = plugins.md5(req.body.password);
-        sql.findOne('sys_user', {name: req.body.name}).then(data => {
+        sql.findOne('sys_user', { name: req.body.name }).then(data => {
             if (!data) {
                 res.json(plugins.write(0, null, '没有此人信息'));
             } else {
@@ -37,7 +38,7 @@ module.exports = {
                         sql.update('sys_user', {
                             token: lock,
                             logintime: newtime
-                        }, {name: req.body.name}).then(data1 => {
+                        }, { name: req.body.name }).then(data1 => {
                             let userlogin = plugins.hasboj(data, new Usermodel());
                             res.json(plugins.write(10000, userlogin, '登录成功'));
                         }).catch(msg => {
@@ -53,16 +54,16 @@ module.exports = {
         });
     },
     //获取所有系统管理员
-    getAlluser(req, res, next){
+    getAlluser(req, res, next) {
         sql.findall("sys_user").then(data => {
             let userlogin = plugins.objdelete(['password', 'token'], data);
             res.json(plugins.write(1, userlogin, null));
         })
     },
     //获取所有系统管理员
-    getuser(req, res, next){
+    getuser(req, res, next) {
         //SELECT * FROM shop.sys_user where name = 'momo'
-        sql.findOne("sys_user", {AutoId: req.body.AutoId}).then(data => {
+        sql.findOne("sys_user", { AutoId: req.body.AutoId }).then(data => {
             if (data) {
                 let userlogin = plugins.hasboj(data, new Usermodel());
                 res.json(plugins.write(1, userlogin, null));
@@ -78,8 +79,8 @@ module.exports = {
      * @param next
      * @constructor
      */
-    DeleteRecord(req, res, next){
-        sql.update("sys_user", {state: 0}, {AutoId: req.body.AutoId}).then(data => {
+    DeleteRecord(req, res, next) {
+        sql.update("sys_user", { state: 0 }, { AutoId: req.body.AutoId }).then(data => {
             res.json(plugins.write(1, null, '修改成功'));
         })
     },
@@ -90,9 +91,9 @@ module.exports = {
      * @param next
      * @constructor
      */
-    ModifyRecord(req, res, next){
+    ModifyRecord(req, res, next) {
         let psd = plugins.md5(req.body.password);
-        sql.update("sys_user", {state: 0}, {password: psd}).then(data => {
+        sql.update("sys_user", { state: 0 }, { password: psd }).then(data => {
             res.json(plugins.write(1, null, '密码修改成功'));
         });
     },
@@ -102,7 +103,7 @@ module.exports = {
      * @param res
      * @param next
      */
-    register(req, res, next){
+    register(req, res, next) {
         let psd = plugins.md5(req.body.password);
         sql.adddate('sys_user', {
             name: req.body.name,
@@ -119,7 +120,7 @@ module.exports = {
      * @param next
      * @constructor
      */
-    SaveRecord(req, res, next){
+    SaveRecord(req, res, next) {
         let psd = plugins.md5(req.body.password);
         if (req.body.AutoId < 1) {
             sql.adddate('sys_user', {
@@ -133,7 +134,7 @@ module.exports = {
             sql.update("sys_user", {
                 name: req.body.name,
                 state: req.body.state
-            }, {AutoId: req.body.AutoId}).then(data => {
+            }, { AutoId: req.body.AutoId }).then(data => {
                 res.json(plugins.write(1, null, '修改成功'));
             })
         }

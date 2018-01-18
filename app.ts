@@ -9,6 +9,7 @@ let index = require('./routes/index');
 let users = require('./routes/users');
 let shops = require('./routes/shop');
 let carts = require('./routes/cart');
+let classification = require('./routes/classification');
 import user from "./Controller/user/user.js";
 let app = express();
 
@@ -34,6 +35,7 @@ app.use(function (req, res, next) {
 app.use('/api/user/', users);   //用户表
 app.use('/api/shop/', shops);   //商品表
 app.use('/api/cart/', carts);   //购物车
+app.use('/api/classification/', classification);   //分类
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -81,6 +81,7 @@ class mysqlquery {
         } else if (typeof where == 'string') {
             _WHERE = 'WHERE ' + where;
         }
+        or = or ? or : ';';
         let sql = "SELECT * FROM " + prefix + table + ' ' + _WHERE + or;
         return new Promise((resolve, reject) => {
             conn.query(sql, function (err, data) {

@@ -193,6 +193,30 @@ module.exports = {
                 }
             })
         })
-
+    },
+    /**
+     * 遍历数组获取树结构
+     * @param {*需做树结构数组} data 
+     * @param {*唯一ID} upperlevel 
+     * @param {*树结构上级ID} upperlevel 
+     */
+    getTree(data, level, upperlevel) {
+        console.log(level);
+        let map = {};
+        let val = [];
+        data.forEach((item) => {
+            map[item[level]] = item;
+            delete item.children;
+        });
+        data.forEach(item => {
+            let parent = map[item[upperlevel]];
+            if (parent) {
+                (parent.children || (parent.children = [])).push(item);
+                // delete item;
+            } else {
+                val.push(item);
+            }
+        });
+        return val;
     }
 }
