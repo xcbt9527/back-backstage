@@ -31,10 +31,10 @@ module.exports = {
                     }
                 })
                 sql.findmore('shop', model).then(shop => {
-                    res.json(plugins.write(10001, shop, null));
+                    res.json(plugins.write(1, shop, null));
                 })
             } else {
-                res.json(plugins.write(10001, null, null));
+                res.json(plugins.write(1, null, null));
             }
         })
     },
@@ -49,10 +49,10 @@ module.exports = {
         sql.findOne("cart", {AutoId: req.body.AutoId}).then(data => {
             if (data) {
                 sql.findOne('shop', {AutoId: data[0].shopId}).then(shopdata => {
-                    res.json(plugins.write(1, shopdata, null));
+                    res.json(plugins.write(0, shopdata, null));
                 })
             } else {
-                res.json(plugins.write(0, null, '购物车内无此条商品'));
+                res.json(plugins.write(1, null, '购物车内无此条商品'));
             }
         })
     },
