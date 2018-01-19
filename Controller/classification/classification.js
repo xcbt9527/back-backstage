@@ -21,7 +21,7 @@ module.exports = {
     getAllclassification(req, res, next) {
         sql.findall("classification", { status: 1 }).then(data => {
             let classification = plugins.objdelete(['lastTime','Modifier','status'],data);
-            let tree = plugins.getTree(classification, 'AutoId', 'upperlevel');
+            let tree = plugins.ArrConversionTree(classification, 'AutoId', 'upperlevel');
             res.json(plugins.write(0, tree, null));
         })
     },

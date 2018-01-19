@@ -200,7 +200,7 @@ module.exports = {
      * @param {*唯一ID} upperlevel 
      * @param {*树结构上级ID} upperlevel 
      */
-    getTree(data, level, upperlevel) {
+    ArrConversionTree(data, level, upperlevel) {
         let map = {};
         let val = [];
         data.forEach((item) => {
@@ -217,5 +217,5 @@ module.exports = {
             }
         });
         return val;
-    }
+    },
 }
