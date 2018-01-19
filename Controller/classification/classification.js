@@ -20,7 +20,7 @@ module.exports = {
      */
     getAllclassification(req, res, next) {
         sql.findall("classification", { status: 1 }).then(data => {
-            let classification = plugins.objdelete(['lastTime','Modifier','status'],data);
+            let classification = plugins.objdelete(['lastTime', 'Modifier', 'status'], data);
             let tree = plugins.ArrConversionTree(classification, 'AutoId', 'upperlevel');
             res.json(plugins.write(0, tree, null));
         })
@@ -33,10 +33,10 @@ module.exports = {
      */
     getclassification(req, res, next) {
         //SELECT * FROM shop.sys_user where name = 'momo'
-        sql.findOne("classification", {AutoId: req.body.AutoId,status:1}).then(data => {
-            if(data){
+        sql.findOne("classification", { AutoId: req.body.AutoId, status: 1 }).then(data => {
+            if (data) {
                 res.json(plugins.write(0, data, null));
-            }else{
+            } else {
                 res.json(plugins.write(1, null, '无此分类'));
             }
         })
@@ -49,9 +49,11 @@ module.exports = {
      * @constructor
      */
     Delectclassification(req, res, next) {
-        sql.update("classification", { status: 0,
+        sql.update("classification", {
+            status: 0,
             lastTime: moment().format('YYYY-MM-DD hh:mm:ss'),
-            Modifier: req.body.account }, { AutoId: req.body.AutoId }).then(data => {
+            Modifier: req.body.account
+        }, { AutoId: req.body.AutoId }).then(data => {
             res.json(plugins.write(1, null, '删除成功'));
         })
     },
@@ -63,14 +65,14 @@ module.exports = {
      * @constructor
      */
     Saveclassification(req, res, next) {
-        console.log(1);
         if (req.body.AutoId < 1) {
             sql.adddate('classification', {
                 status: 1,
                 label: req.body.label,
                 upperlevel: req.body.upperlevel,
                 lastTime: moment().format('YYYY-MM-DD hh:mm:ss'),
-                Modifier: req.body.account
+                Modifier: req.body.account,
+                Code: req.body.Code
             }).then(data => {
                 res.json(plugins.write(1, null, '新增成功'));
             })
@@ -80,7 +82,8 @@ module.exports = {
                 label: req.body.label,
                 upperlevel: req.body.upperlevel,
                 lastTime: moment().format('YYYY-MM-DD hh:mm:ss'),
-                Modifier: req.body.account
+                Modifier: req.body.account,
+                Code: req.body.Code
             }, { AutoId: req.body.AutoId }).then(data => {
                 res.json(plugins.write(1, null, '修改成功'));
             })
