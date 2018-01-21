@@ -20,6 +20,8 @@ module.exports = {
                 } else {
                     res.json(plugins.write(-1, null));
                 }
+            }).catch(e=>{
+                res.json(e);
             })
         }
     },
@@ -58,6 +60,8 @@ module.exports = {
         sql.findall("sys_user").then(data => {
             let userlogin = plugins.objdelete(['password', 'token'], data);
             res.json(plugins.write(0, userlogin, null));
+        }).catch(e=>{
+            res.json(e);
         })
     },
     //获取所有系统管理员
@@ -70,6 +74,8 @@ module.exports = {
             } else {
                 res.json(plugins.write(1, null, '没有此人信息'));
             }
+        }).catch(e=>{
+            res.json(e);
         })
     },
     /**
@@ -82,6 +88,8 @@ module.exports = {
     DeleteRecord(req, res, next) {
         sql.update("sys_user", { state: 0 }, { AutoId: req.body.AutoId }).then(data => {
             res.json(plugins.write(1, null, '修改成功'));
+        }).catch(e=>{
+            res.json(e);
         })
     },
     /**
@@ -95,6 +103,8 @@ module.exports = {
         let psd = plugins.md5(req.body.password);
         sql.update("sys_user", { state: 0 }, { password: psd }).then(data => {
             res.json(plugins.write(1, null, '密码修改成功'));
+        }).catch(e=>{
+            res.json(e);
         });
     },
     /**
@@ -111,6 +121,8 @@ module.exports = {
             password: psd
         }).then(data => {
             res.json(plugins.write(1, null, '新增成功'));
+        }).catch(e=>{
+            res.json(e);
         })
     },
     /**
@@ -129,6 +141,8 @@ module.exports = {
                 password: psd
             }).then(data => {
                 res.json(plugins.write(1, null, '新增成功'));
+            }).catch(e=>{
+                res.json(e);
             })
         } else {
             sql.update("sys_user", {
@@ -136,6 +150,8 @@ module.exports = {
                 state: req.body.state
             }, { AutoId: req.body.AutoId }).then(data => {
                 res.json(plugins.write(1, null, '修改成功'));
+            }).catch(e=>{
+                res.json(e);
             })
         }
     }

@@ -19,7 +19,7 @@ class mysqlquery {
         return new Promise((resolve, reject) => {
             conn.query(sql, function (err, data) {
                 if (err) {
-                    reject(json.write(-1, null));
+                    reject(json.write(-100, null));
                 } else {
                     resolve(data[0]);
                 }
@@ -52,7 +52,7 @@ class mysqlquery {
         return new Promise((resolve, reject) => {
             conn.query(sql, function (err, data) {
                 if (err) {
-                    reject(json.write(-1, null));
+                    reject(json.write(-100, null));
                 } else {
                     resolve(data[0]);
                 }
@@ -86,7 +86,7 @@ class mysqlquery {
         return new Promise((resolve, reject) => {
             conn.query(sql, function (err, data) {
                 if (err) {
-                    reject(json.write(-1, null, msg));
+                    reject(json.write(-100, null, msg));
                 } else {
                     resolve(data);
                 }
@@ -127,7 +127,7 @@ class mysqlquery {
             conn.query(sql, function (err, data) {
                 console.log(err);
                 if (err) {
-                    reject(json.write(-1, null));
+                    reject(json.write(-100, null));
                 } else {
                     resolve(data);
                 }

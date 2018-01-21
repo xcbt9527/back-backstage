@@ -6,10 +6,13 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var index = require('./routes/index');
-var users = require('./routes/users');
-var shops = require('./routes/shop');
-var carts = require('./routes/cart');
+var index = require('./routes/lib/index');
+var users = require('./routes/lib/users');
+var shops = require('./routes/lib/shop');
+var carts = require('./routes/lib/cart');
+var menu = require('./routes/lib/menu');
+var roles = require('./routes/lib/roles');
+var classification = require('./routes/lib/classification');
 var user_js_1 = require("./Controller/user/user.js");
 var app = express();
 // view engine setup
@@ -34,6 +37,9 @@ app.use(function (req, res, next) {
 app.use('/api/user/', users); //用户表
 app.use('/api/shop/', shops); //商品表
 app.use('/api/cart/', carts); //购物车
+app.use('/api/classification/', classification); //分类
+app.use('/api/menu/', menu); //菜单栏
+app.use('/api/roles/', roles); //权限
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     var err = new Error('Not Found');

@@ -36,6 +36,8 @@ module.exports = {
             } else {
                 res.json(plugins.write(1, null, null));
             }
+        }).catch(e=>{
+            res.json(e);
         })
     },
     /**
@@ -54,6 +56,8 @@ module.exports = {
             } else {
                 res.json(plugins.write(1, null, '购物车内无此条商品'));
             }
+        }).catch(e=>{
+            res.json(e);
         })
     },
     /**
@@ -66,6 +70,8 @@ module.exports = {
     DelectCart(req, res, next){
         sql.update("cart", {state: 0}, {AutoId: req.body.AutoId}).then(data => {
             res.json(plugins.write(1, null, '删除成功'));
+        }).catch(e=>{
+            res.json(e);
         })
     },
     /**
@@ -85,12 +91,16 @@ module.exports = {
                 lastmodifytime: moment().format('YYYY-MM-DD hh:mm:ss')
             }).then(data => {
                 res.json(plugins.write(1, null, '新增成功'));
+            }).catch(e=>{
+                res.json(e);
             })
         } else {
             sql.update("cart", {
                 num: req.body.num
             }, {AutoId: req.body.AutoId}).then(data => {
                 res.json(plugins.write(1, null, '修改成功'));
+            }).catch(e=>{
+                res.json(e);
             })
         }
     }

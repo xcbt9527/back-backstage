@@ -2,7 +2,7 @@
  * Created by momo on 2018/1/8.
  */
 import express from "express";
-import cart from "../Controller/cart/cart";
+import cart from "../../Controller/cart/cart";
 let router = express.Router();
 router.post('/getAllCart', (req, res, next) => {
     cart.getAllCart(req, res, next);

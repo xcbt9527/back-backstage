@@ -1,15 +1,12 @@
 /**
- * Created by momo on 2018/1/8.
- */
-/**
- * Created by baird on 17/11/23.
+ * Created by momo on 2018/1/21.
  */
 
 import query from "../../sql/query";
 import plugins from "../../public/public";
 import moment from "moment";
-import {classificationmodel} from "../../model/classification";
 import {fail} from "assert";
+const uuid = require("uuid/v1");
 const sql = new query();
 module.exports = {
     /**
@@ -18,11 +15,11 @@ module.exports = {
      * @param res
      * @param next
      */
-    getAllclassification(req, res, next) {
-        sql.findall("classification", {status: 1}).then(data => {
+    getAllroles(req, res, next) {
+        sql.findall("sys_roles", {status: 1}).then(data => {
             if (data.length>0) {
-                let classification = plugins.objdelete(['lastTime', 'Modifier', 'status'], data);
-                let tree = plugins.ArrConversionTree(classification, 'AutoId', 'upperlevel');
+                let rolesnmodel = plugins.objdelete(['lastTime', 'Modifier', 'status'], data);
+                let tree = plugins.getTree(rolesnmodel, 'AutoId', 'upperlevel');
                 res.json(plugins.write(0, tree, null));
             } else {
                 res.json(plugins.write(0, [], null));
@@ -32,18 +29,17 @@ module.exports = {
         })
     },
     /**
-     * 获取单条分类
+     * 获取单条菜单
      * @param req
      * @param res
      * @param next
      */
-    getclassification(req, res, next) {
-        //SELECT * FROM shop.sys_user where name = 'momo'
-        sql.findOne("classification", {AutoId: req.body.AutoId, status: 1}).then(data => {
+    getroles(req, res, next) {
+        sql.findOne("sys_roles", {AutoId: req.body.AutoId, status: 1}).then(data => {
             if (data) {
                 res.json(plugins.write(0, data, null));
             } else {
-                res.json(plugins.write(1, null, '无此分类'));
+                res.json(plugins.write(1, null, '无此菜单栏'));
             }
         }).catch(e => {
             res.json(e);
@@ -56,8 +52,8 @@ module.exports = {
      * @param next
      * @constructor
      */
-    Delectclassification(req, res, next) {
-        sql.update("classification", {
+    Delectroles(req, res, next) {
+        sql.update("sys_roles", {
             status: 0,
             lastTime: moment().format('YYYY-MM-DD hh:mm:ss'),
             Modifier: req.body.account
@@ -68,34 +64,37 @@ module.exports = {
         })
     },
     /**
-     * 添加分类
+     * 添加菜单栏
      * @param req
      * @param res
      * @param next
      * @constructor
      */
-    Saveclassification(req, res, next) {
+    Saveroles(req, res, next) {
+        let Uid = uuid();
         if (req.body.AutoId < 1) {
-            sql.adddate('classification', {
+            sql.adddate('sys_roles', {
                 status: 1,
                 label: req.body.label,
                 upperlevel: req.body.upperlevel,
                 lastTime: moment().format('YYYY-MM-DD hh:mm:ss'),
                 Modifier: req.body.account,
-                Code: req.body.Code
+                Uid: Uid,
+                menu_roles: req.body.menu,
             }).then(data => {
                 res.json(plugins.write(1, null, '新增成功'));
             }).catch(e => {
                 res.json(e);
             })
         } else {
-            sql.update("classification", {
+            sql.update("sys_roles", {
                 status: 1,
                 label: req.body.label,
                 upperlevel: req.body.upperlevel,
                 lastTime: moment().format('YYYY-MM-DD hh:mm:ss'),
                 Modifier: req.body.account,
-                Code: req.body.Code
+                Uid: Uid,
+                menu_roles: req.body.menu,
             }, {AutoId: req.body.AutoId}).then(data => {
                 res.json(plugins.write(1, null, '修改成功'));
             }).catch(e => {
