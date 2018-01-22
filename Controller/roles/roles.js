@@ -19,6 +19,10 @@ module.exports = {
         sql.findall("sys_roles", { status: 1 }).then(data => {
             if (data.length > 0) {
                 let rolesnmodel = plugins.objdelete(['lastTime', 'Modifier', 'status'], data);
+                rolesnmodel = rolesnmodel.map(e=>{
+                    let  menu_roles = e.menu_roles.replace(/"/g, "");
+                       return Object.assign({},e,{menu_roles:menu_roles.split(",")});
+                     })
                 res.json(plugins.write(0, rolesnmodel, null));
             } else {
                 res.json(plugins.write(0, [], null));

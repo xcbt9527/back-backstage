@@ -59,9 +59,11 @@ module.exports = {
     getAlluser(req, res, next) {
         sql.findall("sys_user").then(data => {
             let user = plugins.objdelete(['password', 'token'], data);
-            user.forEach(u => {
-                u.Roles = JSON.parse(u.Roles);
-            });
+            user = user.map(e=>{
+                let  Roles = e.Roles.replace(/"/g, "");
+                Roles = Roles.split(",");
+                   return Object.assign({},e,{Roles:Roles});
+                 })
             res.json(plugins.write(0, user, null));
         }).catch(e => {
             res.json(e);
