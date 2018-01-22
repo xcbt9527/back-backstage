@@ -7,6 +7,10 @@ let router = express.Router();
 router.post('/getAllroles', (req, res, next) => {
     roles.getAllroles(req, res, next);
 });
+
+router.post('/getTreeroles', (req, res, next) => {
+    roles.getTreeroles(req, res, next);
+});
 router.post('/getroles', (req, res, next) => {
     roles.getroles(req, res, next);
 });

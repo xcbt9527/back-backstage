@@ -5,7 +5,7 @@
 import query from "../../sql/query";
 import plugins from "../../public/public";
 import moment from "moment";
-import {fail} from "assert";
+import { fail } from "assert";
 const uuid = require("uuid/v1");
 const sql = new query();
 module.exports = {
@@ -16,10 +16,22 @@ module.exports = {
      * @param next
      */
     getAllroles(req, res, next) {
-        sql.findall("sys_roles", {status: 1}).then(data => {
-            if (data.length>0) {
+        sql.findall("sys_roles", { status: 1 }).then(data => {
+            if (data.length > 0) {
                 let rolesnmodel = plugins.objdelete(['lastTime', 'Modifier', 'status'], data);
-                let tree = plugins.getTree(rolesnmodel, 'AutoId', 'upperlevel');
+                res.json(plugins.write(0, rolesnmodel, null));
+            } else {
+                res.json(plugins.write(0, [], null));
+            }
+        }).catch(e => {
+            res.json(e);
+        })
+    },
+    getTreeroles(req, res, next) {
+        sql.findall("sys_roles", { status: 1 }).then(data => {
+            if (data.length > 0) {
+                let rolesnmodel = plugins.objdelete(['lastTime', 'Modifier', 'status'], data);
+                let tree = plugins.ArrConversionTree(rolesnmodel, 'AutoId', 'upperlevel');
                 res.json(plugins.write(0, tree, null));
             } else {
                 res.json(plugins.write(0, [], null));
@@ -35,7 +47,7 @@ module.exports = {
      * @param next
      */
     getroles(req, res, next) {
-        sql.findOne("sys_roles", {AutoId: req.body.AutoId, status: 1}).then(data => {
+        sql.findOne("sys_roles", { AutoId: req.body.AutoId, status: 1 }).then(data => {
             if (data) {
                 res.json(plugins.write(0, data, null));
             } else {
@@ -57,7 +69,7 @@ module.exports = {
             status: 0,
             lastTime: moment().format('YYYY-MM-DD hh:mm:ss'),
             Modifier: req.body.account
-        }, {AutoId: req.body.AutoId}).then(data => {
+        }, { AutoId: req.body.AutoId }).then(data => {
             res.json(plugins.write(1, null, '删除成功'));
         }).catch(e => {
             res.json(e);
@@ -71,7 +83,8 @@ module.exports = {
      * @constructor
      */
     Saveroles(req, res, next) {
-        let Uid = uuid();
+        let model = JSON.stringify(req.body.menu_roles);
+        console.log(model);
         if (req.body.AutoId < 1) {
             sql.adddate('sys_roles', {
                 status: 1,
@@ -79,8 +92,8 @@ module.exports = {
                 upperlevel: req.body.upperlevel,
                 lastTime: moment().format('YYYY-MM-DD hh:mm:ss'),
                 Modifier: req.body.account,
-                Uid: Uid,
-                menu_roles: req.body.menu,
+                Uid: req.body.Uid,
+                menu_roles: model,
             }).then(data => {
                 res.json(plugins.write(1, null, '新增成功'));
             }).catch(e => {
@@ -93,9 +106,9 @@ module.exports = {
                 upperlevel: req.body.upperlevel,
                 lastTime: moment().format('YYYY-MM-DD hh:mm:ss'),
                 Modifier: req.body.account,
-                Uid: Uid,
-                menu_roles: req.body.menu,
-            }, {AutoId: req.body.AutoId}).then(data => {
+                Uid: req.body.Uid,
+                menu_roles: model,
+            }, { AutoId: req.body.AutoId }).then(data => {
                 res.json(plugins.write(1, null, '修改成功'));
             }).catch(e => {
                 res.json(e);

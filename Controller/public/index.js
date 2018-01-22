@@ -11,7 +11,6 @@ module.exports = {
      * @param next
      */
     getuid(req, res, next) {
-        console.log(1);
         res.json(plugins.write(0, uuid(), null));
     },
 

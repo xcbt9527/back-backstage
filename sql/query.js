@@ -125,7 +125,6 @@ class mysqlquery {
         let sql = "UPDATE " + prefix + table + ' SET ' + _SETS + ' ' + _WHERE;
         return new Promise((resolve, reject) => {
             conn.query(sql, function (err, data) {
-                console.log(err);
                 if (err) {
                     reject(json.write(-100, null));
                 } else {
@@ -156,10 +155,12 @@ class mysqlquery {
         }
         _WHERE = _WHERE.slice(0, -1);
         let sql = "INSERT INTO " + prefix + table + '(' + _SETS + ')' + 'VALUES' + '(' + _WHERE + ')';
+        console.log(sql);
         return new Promise((resolve, reject) => {
             conn.query(sql, function (err, data) {
                 if (err) {
-                    reject(json.write(-1, null));
+                    console.log(err);
+                    reject(json.write(-100, null));
                 } else {
                     resolve(data);
                 }
@@ -196,7 +197,7 @@ class mysqlquery {
         return new Promise((resolve, reject) => {
             conn.query(sql, function (err, data) {
                 if (err) {
-                    reject(json.write(-1, null));
+                    reject(json.write(-100, null));
                 } else {
                     resolve(data);
                 }
