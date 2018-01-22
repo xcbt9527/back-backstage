@@ -20,4 +20,8 @@ export class menumodel {
      * 菜单地址
      */
     link = null;
+    /**
+     * icon
+     */
+    icon = null;
     }

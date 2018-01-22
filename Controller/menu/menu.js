@@ -5,7 +5,7 @@
 import query from "../../sql/query";
 import plugins from "../../public/public";
 import moment from "moment";
-import {fail} from "assert";
+import { fail } from "assert";
 const uuid = require("uuid/v1");
 const sql = new query();
 module.exports = {
@@ -16,11 +16,24 @@ module.exports = {
      * @param next
      */
     getAllmenu(req, res, next) {
-        sql.findall("sys_menu", {status: 1}).then(data => {
-            console.log(data);
-            if (data.length>0) {
+        sql.findall("sys_menu", { status: 1 }).then(data => {
+            if (data.length > 0) {
+                data.sort((a, b) => {
+                    return a.upperlevel - b.upperlevel;
+                });
+                res.json(plugins.write(0, data, null));
+            } else {
+                res.json(plugins.write(0, [], null));
+            }
+        }).catch(e => {
+            res.json(e);
+        })
+    },
+    getTreemenu(req, res, next) {
+        sql.findall("sys_menu", { status: 1 }).then(data => {
+            if (data.length > 0) {
                 let menumodel = plugins.objdelete(['lastTime', 'Modifier', 'status'], data);
-                let tree = plugins.getTree(menumodel, 'AutoId', 'upperlevel');
+                let tree = plugins.ArrConversionTree(menumodel, 'AutoId', 'upperlevel');
                 res.json(plugins.write(0, tree, null));
             } else {
                 res.json(plugins.write(0, [], null));
@@ -36,7 +49,7 @@ module.exports = {
      * @param next
      */
     getmenu(req, res, next) {
-        sql.findOne("sys_menu", {AutoId: req.body.AutoId, status: 1}).then(data => {
+        sql.findOne("sys_menu", { AutoId: req.body.AutoId, status: 1 }).then(data => {
             if (data) {
                 res.json(plugins.write(0, data, null));
             } else {
@@ -58,7 +71,7 @@ module.exports = {
             status: 0,
             lastTime: moment().format('YYYY-MM-DD hh:mm:ss'),
             Modifier: req.body.account
-        }, {AutoId: req.body.AutoId}).then(data => {
+        }, { AutoId: req.body.AutoId }).then(data => {
             res.json(plugins.write(1, null, '删除成功'));
         }).catch(e => {
             res.json(e);
@@ -82,6 +95,7 @@ module.exports = {
                 Modifier: req.body.account,
                 Uid: Uid,
                 link: req.body.link,
+                icon: req.body.icon,
             }).then(data => {
                 res.json(plugins.write(1, null, '新增成功'));
             }).catch(e => {
@@ -96,7 +110,8 @@ module.exports = {
                 Modifier: req.body.account,
                 Uid: Uid,
                 link: req.body.link,
-            }, {AutoId: req.body.AutoId}).then(data => {
+                icon: req.body.icon,
+            }, { AutoId: req.body.AutoId }).then(data => {
                 res.json(plugins.write(1, null, '修改成功'));
             }).catch(e => {
                 res.json(e);

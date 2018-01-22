@@ -12,6 +12,7 @@ let carts = require('./routes/lib/cart');
 let menu = require('./routes/lib/menu');
 let roles = require('./routes/lib/roles');
 let classification = require('./routes/lib/classification');
+let publics = require("./routes/public");
 import user from "./Controller/user/user.js";
 let app = express();
 
@@ -23,9 +24,9 @@ app.set('view engine', 'html');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'dist'), {maxAge: 1000 * 60 * 60}));
+app.use(express.static(path.join(__dirname, 'dist'), { maxAge: 1000 * 60 * 60 }));
 app.use(function (req, res, next) {
     if (req.url === '/api/user/login' || req.url === '/api/user/register') {
         next();
@@ -41,6 +42,7 @@ app.use('/api/cart/', carts);   //购物车
 app.use('/api/classification/', classification);   //分类
 app.use('/api/menu/', menu);   //菜单栏
 app.use('/api/roles/', roles);   //权限
+app.use('/api/public/', publics);   //公用
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     let err = new Error('Not Found');

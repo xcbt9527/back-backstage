@@ -7,6 +7,10 @@ let router = express.Router();
 router.post('/getAllmenu', (req, res, next) => {
     menu.getAllmenu(req, res, next);
 });
+
+router.post('/getTreemenu', (req, res, next) => {
+    menu.getTreemenu(req, res, next);
+});
 router.post('/getmenu', (req, res, next) => {
     menu.getmenu(req, res, next);
 });
