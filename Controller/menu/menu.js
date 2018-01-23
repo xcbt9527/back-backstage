@@ -31,7 +31,6 @@ module.exports = {
     },
     getTreemenu(req, res, next) {
         sql.findall("sys_menu", { status: 1 }).then(data => {
-            let rolesmenu = [];
             let menumodel = plugins.objdelete(['lastTime', 'Modifier', 'status'], data);
             if (Number(req.body.showarrroles) === 1) {
                 let tree = plugins.ArrConversionTree(menumodel, 'AutoId', 'upperlevel');
@@ -40,6 +39,7 @@ module.exports = {
             }
             let account_Roles = req.body.account_Roles.replace(/"/g, "");
             sql.findOne("sys_roles", { Uid: account_Roles }).then(roles => {
+                let rolesmenu = [];
                 if (data.length > 0) {
                     roles.menu_roles = roles.menu_roles.replace(/"/g, "");
                     roles.menu_roles = roles.menu_roles.split(",");
@@ -111,7 +111,6 @@ module.exports = {
      * @constructor
      */
     Savemenu(req, res, next) {
-        let Uid = uuid();
         if (req.body.AutoId < 1) {
             sql.adddate('sys_menu', {
                 status: 1,
@@ -119,7 +118,7 @@ module.exports = {
                 upperlevel: req.body.upperlevel,
                 lastTime: moment().format('YYYY-MM-DD hh:mm:ss'),
                 Modifier: req.body.account,
-                Uid: Uid,
+                Uid: req.body.Uid,
                 link: req.body.link,
                 icon: req.body.icon,
             }).then(data => {
@@ -134,7 +133,7 @@ module.exports = {
                 upperlevel: req.body.upperlevel,
                 lastTime: moment().format('YYYY-MM-DD hh:mm:ss'),
                 Modifier: req.body.account,
-                Uid: Uid,
+                Uid: req.body.Uid,
                 link: req.body.link,
                 icon: req.body.icon,
             }, { AutoId: req.body.AutoId }).then(data => {

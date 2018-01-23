@@ -15,12 +15,12 @@ module.exports = {
      * @param next
      */
     getAllshop(req, res, next) {
-        sql.findall("shop").then(data => {
+        sql.findall("shop", { state: 1 }).then(data => {
             data.forEach(e => {
                 e.picture = plugins.getImg(e.picture);
             });
             res.json(plugins.write(0, data, null));
-        }).catch(e=>{
+        }).catch(e => {
             res.json(e);
         })
     },
@@ -38,7 +38,7 @@ module.exports = {
             } else {
                 res.json(plugins.write(1, null, '没有此人信息'));
             }
-        }).catch(e=>{
+        }).catch(e => {
             res.json(e);
         })
     },
@@ -52,7 +52,7 @@ module.exports = {
     DeleteRecord(req, res, next) {
         sql.update("shop", { state: 0 }, { AutoId: req.body.AutoId }).then(data => {
             res.json(plugins.write(1, null, '更改状态成功'));
-        }).catch(e=>{
+        }).catch(e => {
             res.json(e);
         })
     },
@@ -78,7 +78,7 @@ module.exports = {
                     lastmodifytime: newtime
                 }).then(data => {
                     res.json(plugins.write(1, null, '新增成功'));
-                }).catch(e=>{
+                }).catch(e => {
                     res.json(e);
                 })
             } else {
@@ -90,7 +90,7 @@ module.exports = {
                     lastmodifytime: newtime
                 }, { AutoId: req.body.AutoId }).then(data => {
                     res.json(plugins.write(1, null, '修改成功'));
-                }).catch(e=>{
+                }).catch(e => {
                     res.json(e);
                 })
             }
