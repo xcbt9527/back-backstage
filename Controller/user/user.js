@@ -16,6 +16,7 @@ module.exports = {
             sql.findOne('sys_user', { token: token, state: 1 }).then(data => {
                 if (data) {
                     req.body.account = data.AutoId;
+                    req.body.account_Roles = data.Roles;
                     next();
                 } else {
                     res.json(plugins.write(-1, null));
@@ -153,6 +154,8 @@ module.exports = {
                 state: 1,
                 password: psd,
                 Roles: JSON.stringify(req.body.Roles),
+                phone: req.body.phone,
+                position: req.body.position
             }).then(data => {
                 res.json(plugins.write(1, null, '新增成功'));
             }).catch(e => {
@@ -161,8 +164,9 @@ module.exports = {
         } else {
             sql.update("sys_user", {
                 name: req.body.name,
-                state: 1,
                 Roles: JSON.stringify(req.body.Roles),
+                phone: req.body.phone,
+                position: req.body.position
             }, { AutoId: req.body.AutoId }).then(data => {
                 res.json(plugins.write(1, null, '修改成功'));
             }).catch(e => {

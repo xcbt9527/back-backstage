@@ -31,13 +31,39 @@ module.exports = {
     },
     getTreemenu(req, res, next) {
         sql.findall("sys_menu", { status: 1 }).then(data => {
-            if (data.length > 0) {
-                let menumodel = plugins.objdelete(['lastTime', 'Modifier', 'status'], data);
+            let rolesmenu = [];
+            let menumodel = plugins.objdelete(['lastTime', 'Modifier', 'status'], data);
+            if (Number(req.body.showarrroles) === 1) {
                 let tree = plugins.ArrConversionTree(menumodel, 'AutoId', 'upperlevel');
                 res.json(plugins.write(0, tree, null));
-            } else {
-                res.json(plugins.write(0, [], null));
+                return;
             }
+            let account_Roles = req.body.account_Roles.replace(/"/g, "");
+            sql.findOne("sys_roles", { Uid: account_Roles }).then(roles => {
+                if (data.length > 0) {
+                    roles.menu_roles = roles.menu_roles.replace(/"/g, "");
+                    roles.menu_roles = roles.menu_roles.split(",");
+                    roles.menu_roles.forEach(m => {
+                        menumodel.forEach(mm => {
+                            if (m === mm.Uid) {
+                                rolesmenu.push(mm);
+                                menumodel.forEach(mmm => {
+                                    if (mm.upperlevel === mmm.AutoId) {
+                                        rolesmenu.push(mmm);
+                                    }
+                                })
+                            }
+                        });
+                    })
+                    rolesmenu = Array.from(new Set(rolesmenu));
+                    let tree = plugins.ArrConversionTree(rolesmenu, 'AutoId', 'upperlevel');
+                    res.json(plugins.write(0, tree, null));
+                } else {
+                    res.json(plugins.write(0, [], null));
+                }
+            }).catch(e => {
+                res.json(e);
+            })
         }).catch(e => {
             res.json(e);
         })

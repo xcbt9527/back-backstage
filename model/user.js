@@ -22,4 +22,16 @@ export class Usermodel {
      * session ID
      * */
     token = null;
+    /**
+     * 手机号码
+     */
+    phone = null;
+    /**
+     * 职位
+     */
+    position = null;
+    /**
+     * 权限
+     */
+    sys_usercol = null;
 }
