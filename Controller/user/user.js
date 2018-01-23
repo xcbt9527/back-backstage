@@ -13,7 +13,7 @@ module.exports = {
         if (!token) {
             res.json(plugins.write(-1, null));
         } else {
-            sql.findOne('sys_user', { token: token }).then(data => {
+            sql.findOne('sys_user', { token: token, state: 1 }).then(data => {
                 if (data) {
                     req.body.account = data.AutoId;
                     next();
@@ -30,10 +30,14 @@ module.exports = {
         sql.findOne('sys_user', { name: req.body.name }).then(data => {
             if (!data) {
                 res.json(plugins.write(1, null, '没有此人信息'));
-            } else {
-                if (psd === data.password) {
-                    if (data.state === -1) {
-                        res.json(plugins.write(1, null, '账号已冻结，请联系管理员'));
+            } else
+                if (data.state === -1) {
+                    res.json(plugins.write(1, null, '账号已冻结，请联系管理员'));
+                } else if (data.state === 0) {
+                    res.json(plugins.write(1, null, '无此人信息'));
+                } else {
+                    if (psd !== data.password) {
+                        res.json(plugins.write(1, null, '密码错误'));
                     } else {
                         let newtime = moment().format('YYYY-MM-DD hh:mm:ss');
                         let lock = plugins.md5(req.body.name + moment().format('YYYYMMDD'));
@@ -47,10 +51,8 @@ module.exports = {
                             res.json(msg);
                         });
                     }
-                } else {
-                    res.json(plugins.write(1, null, '密码错误'));
                 }
-            }
+
         }).catch(msg => {
             res.json(msg);
         });
@@ -59,11 +61,11 @@ module.exports = {
     getAlluser(req, res, next) {
         sql.findall("sys_user").then(data => {
             let user = plugins.objdelete(['password', 'token'], data);
-            user = user.map(e=>{
-                let  Roles = e.Roles.replace(/"/g, "");
+            user = user.map(e => {
+                let Roles = e.Roles.replace(/"/g, "");
                 Roles = Roles.split(",");
-                   return Object.assign({},e,{Roles:Roles});
-                 })
+                return Object.assign({}, e, { Roles: Roles });
+            })
             res.json(plugins.write(0, user, null));
         }).catch(e => {
             res.json(e);
@@ -71,7 +73,7 @@ module.exports = {
     },
     //获取指定系统管理员
     getuser(req, res, next) {
-        sql.findOne("sys_user", { AutoId: req.body.AutoId }).then(data => {
+        sql.findOne("sys_user", { AutoId: req.body.AutoId, state: 1 }).then(data => {
             if (data) {
                 let user = plugins.hasboj(data, new Usermodel());
                 user.Roles = JSON.parse(user.Roles);
@@ -91,8 +93,14 @@ module.exports = {
      * @constructor
      */
     DeleteRecord(req, res, next) {
-        sql.update("sys_user", { state: 0 }, { AutoId: req.body.AutoId }).then(data => {
-            res.json(plugins.write(1, null, '修改成功'));
+        sql.update("sys_user", { state: req.body.state }, { AutoId: req.body.AutoId }).then(data => {
+            let msg = null;
+            if (req.body.state === -1) {
+                msg = '冻结成功';
+            } else {
+                msg = '删除成功';
+            }
+            res.json(plugins.write(1, null, msg));
         }).catch(e => {
             res.json(e);
         })
@@ -106,7 +114,7 @@ module.exports = {
      */
     ModifyRecord(req, res, next) {
         let psd = plugins.md5(req.body.password);
-        sql.update("sys_user", { state: 0 }, { password: psd }).then(data => {
+        sql.update("sys_user", { password: psd }, { AutoId: req.body.AutoId }).then(data => {
             res.json(plugins.write(1, null, '密码修改成功'));
         }).catch(e => {
             res.json(e);
@@ -142,7 +150,7 @@ module.exports = {
         if (req.body.AutoId < 1) {
             sql.adddate('sys_user', {
                 name: req.body.name,
-                state: req.body.state,
+                state: 1,
                 password: psd,
                 Roles: JSON.stringify(req.body.Roles),
             }).then(data => {
@@ -153,7 +161,7 @@ module.exports = {
         } else {
             sql.update("sys_user", {
                 name: req.body.name,
-                state: req.body.state,
+                state: 1,
                 Roles: JSON.stringify(req.body.Roles),
             }, { AutoId: req.body.AutoId }).then(data => {
                 res.json(plugins.write(1, null, '修改成功'));
