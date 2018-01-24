@@ -15,7 +15,7 @@ export class rolesclass{
      * @param res
      * @param next
      */
-    getAllroles(req, res, next) {
+    getAll(req, res, next) {
         sql.findall("sys_roles", { status: 1 }).then(data => {
             if (data.length > 0) {
                 let rolesnmodel = plugins.objdelete(['lastTime', 'Modifier', 'status'], data);
@@ -31,7 +31,7 @@ export class rolesclass{
             res.json(e);
         })
     }
-    getTreeroles(req, res, next) {
+    getTree(req, res, next) {
         sql.findall("sys_roles", { status: 1 }).then(data => {
             if (data.length > 0) {
                 let rolesnmodel = plugins.objdelete(['lastTime', 'Modifier', 'status'], data);
@@ -50,7 +50,7 @@ export class rolesclass{
      * @param res
      * @param next
      */
-    getroles(req, res, next) {
+    getOne(req, res, next) {
         sql.findOne("sys_roles", { AutoId: req.body.AutoId, status: 1 }).then(data => {
             if (data) {
                 res.json(plugins.write(0, data, null));
@@ -68,7 +68,7 @@ export class rolesclass{
      * @param next
      * @constructor
      */
-    Delectroles(req, res, next) {
+    Delect(req, res, next) {
         sql.update("sys_roles", {
             status: 0,
             lastTime: moment().format('YYYY-MM-DD hh:mm:ss'),
@@ -86,7 +86,7 @@ export class rolesclass{
      * @param next
      * @constructor
      */
-    Saveroles(req, res, next) {
+    Save(req, res, next) {
         let model = JSON.stringify(req.body.menu_roles);
         console.log(model);
         if (req.body.AutoId < 1) {

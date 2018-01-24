@@ -15,7 +15,7 @@ export class menuclass {
       * @param res
       * @param next
       */
-    getAllmenu(req, res, next) {
+    getAll(req, res, next) {
         sql.findall("sys_menu", { status: 1 }).then(data => {
             if (data.length > 0) {
                 data.sort((a, b) => {
@@ -29,7 +29,7 @@ export class menuclass {
             res.json(e);
         })
     }
-    getTreemenu(req, res, next) {
+    getTree(req, res, next) {
         sql.findall("sys_menu", { status: 1 }).then(data => {
             let menumodel = plugins.objdelete(['lastTime', 'Modifier', 'status'], data);
             if (Number(req.body.showarrroles) === 1) {
@@ -74,7 +74,7 @@ export class menuclass {
      * @param res
      * @param next
      */
-    getmenu(req, res, next) {
+    getOne(req, res, next) {
         sql.findOne("sys_menu", { AutoId: req.body.AutoId, status: 1 }).then(data => {
             if (data) {
                 res.json(plugins.write(0, data, null));
@@ -92,7 +92,7 @@ export class menuclass {
      * @param next
      * @constructor
      */
-    Delectmenu(req, res, next) {
+    Delect(req, res, next) {
         sql.update("sys_menu", {
             status: 0,
             lastTime: moment().format('YYYY-MM-DD hh:mm:ss'),
@@ -110,7 +110,7 @@ export class menuclass {
      * @param next
      * @constructor
      */
-    Savemenu(req, res, next) {
+    Save(req, res, next) {
         if (req.body.AutoId < 1) {
             sql.adddate('sys_menu', {
                 status: 1,

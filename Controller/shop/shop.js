@@ -14,7 +14,7 @@ export class shopclass {
        * @param res
        * @param next
        */
-    getAllshop(req, res, next) {
+    getAll(req, res, next) {
         sql.findall("shop", { state: 1 }).then(data => {
             data.forEach(e => {
                 e.picture = plugins.getImg(e.picture);
@@ -30,7 +30,7 @@ export class shopclass {
    * @param res
    * @param next
    */
-    getshop(req, res, next) {
+    getOne(req, res, next) {
         sql.findOne("shop", { AutoId: req.body.AutoId }).then(data => {
             if (data) {
                 let userlogin = plugins.hasboj(data, new shopmodel());
@@ -49,7 +49,7 @@ export class shopclass {
     * @param next
     * @constructor
     */
-    DeleteRecord(req, res, next) {
+    Delete(req, res, next) {
         sql.update("shop", { state: 0 }, { AutoId: req.body.AutoId }).then(data => {
             res.json(plugins.write(1, null, '更改状态成功'));
         }).catch(e => {
@@ -63,7 +63,7 @@ export class shopclass {
     * @param next
     * @constructor
     */
-    SaveRecord(req, res, next) {
+    Save(req, res, next) {
         let newtime = moment().format('YYYY-MM-DD hh:mm:ss');
         let imgname = plugins.md5(newtime + 'picture');
         let imgname1 = plugins.md5(newtime + 'details');

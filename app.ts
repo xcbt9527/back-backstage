@@ -13,6 +13,7 @@ let menu = require('./routes/lib/menu');
 let roles = require('./routes/lib/roles');
 let classification = require('./routes/lib/classification');
 let publics = require("./routes/public");
+let notepad = require("./routes/lib/notepad");
 import { userclass } from "./Controller/user/user.js";
 const user = new userclass();
 let app = express();
@@ -37,13 +38,14 @@ app.use(function (req, res, next) {
     }
 });
 
+app.use('/api/public/', publics);   //公用
 app.use('/api/user/', users);   //用户表
 app.use('/api/shop/', shops);   //商品表
 app.use('/api/cart/', carts);   //购物车
 app.use('/api/classification/', classification);   //分类
 app.use('/api/menu/', menu);   //菜单栏
 app.use('/api/roles/', roles);   //权限
-app.use('/api/public/', publics);   //公用
+app.use('/api/notepad/', notepad);   //记事本
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     let err = new Error('Not Found');

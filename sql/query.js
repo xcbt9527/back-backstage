@@ -41,7 +41,12 @@ class mysqlquery {
             _WHERE += 'WHERE ';
             //循环获取查询条件
             for (let k in where) {
-                _WHERE += k + "='" + where[k] + "' AND ";
+                let model = where[k].toString();
+                if((model.indexOf('<')===-1)&&(model.indexOf('>')===-1)&&(model.indexOf('<=')===-1)&&(model.indexOf('>=')===-1)){
+                    _WHERE += k + "='" + where[k] + "' AND ";
+                }else{
+                    _WHERE += k + where[k] + " AND ";
+                }
             }
             _WHERE = _WHERE.slice(0, -4);
         } else if (typeof where == 'string') {
@@ -75,7 +80,12 @@ class mysqlquery {
             _WHERE += 'WHERE ';
             //循环获取查询条件
             for (let k in where) {
-                _WHERE += k + "='" + where[k] + "' AND ";
+                let model = where[k].toString();
+                if((model.indexOf('<')===-1)&&(model.indexOf('>')===-1)&&(model.indexOf('<=')===-1)&&(model.indexOf('>=')===-1)){
+                    _WHERE += k + "='" + where[k] + "' AND ";
+                }else{
+                    _WHERE += k + where[k] + " AND ";
+                }
             }
             _WHERE = _WHERE.slice(0, -4);
         } else if (typeof where == 'string') {
@@ -83,10 +93,11 @@ class mysqlquery {
         }
         or = or ? or : ';';
         let sql = "SELECT * FROM " + prefix + table + ' ' + _WHERE + or;
+        console.log(sql);
         return new Promise((resolve, reject) => {
             conn.query(sql, function (err, data) {
                 if (err) {
-                    reject(json.write(-100, null, msg));
+                    reject(json.write(-100, null));
                 } else {
                     resolve(data);
                 }

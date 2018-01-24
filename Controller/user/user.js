@@ -76,7 +76,7 @@ export class userclass {
      * @param {*} res 
      * @param {*} next 
      */
-    getAlluser(req, res, next) {
+    getAll(req, res, next) {
         sql.findall("sys_user").then(data => {
             let user = plugins.objdelete(['password', 'token'], data);
             user = user.map(e => {
@@ -95,7 +95,7 @@ export class userclass {
      * @param {*} res 
      * @param {*} next 
      */
-    getuser(req, res, next) {
+    getOne(req, res, next) {
         sql.findOne("sys_user", { AutoId: req.body.AutoId, state: 1 }).then(data => {
             if (data) {
                 let user = plugins.hasboj(data, new Usermodel());
@@ -115,7 +115,7 @@ export class userclass {
      * @param next
      * @constructor
      */
-    DeleteRecord(req, res, next) {
+    Delete(req, res, next) {
         sql.update("sys_user", { state: req.body.state }, { AutoId: req.body.AutoId }).then(data => {
             let msg = null;
             if (req.body.state === -1) {
@@ -168,7 +168,7 @@ export class userclass {
      * @param next
      * @constructor
      */
-    SaveRecord(req, res, next) {
+    Save(req, res, next) {
         let psd = plugins.md5(req.body.password);
         if (req.body.AutoId < 1) {
             sql.adddate('sys_user', {

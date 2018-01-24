@@ -17,7 +17,7 @@ module.exports = {
      * @param res
      * @param next
      */
-    getAllCart(req, res, next){
+    getAll(req, res, next){
         if (req.body.basicinfoId < 0 || req.body.basicinfoId) {
             res.json(plugins.write(0, null, '人不能为空'));
             return;
@@ -46,7 +46,7 @@ module.exports = {
      * @param res
      * @param next
      */
-    getCart(req, res, next){
+    getOne(req, res, next){
         //SELECT * FROM shop.sys_user where name = 'momo'
         sql.findOne("cart", {AutoId: req.body.AutoId}).then(data => {
             if (data) {
@@ -67,7 +67,7 @@ module.exports = {
      * @param next
      * @constructor
      */
-    DelectCart(req, res, next){
+    Delect(req, res, next){
         sql.update("cart", {state: 0}, {AutoId: req.body.AutoId}).then(data => {
             res.json(plugins.write(1, null, '删除成功'));
         }).catch(e=>{
@@ -81,7 +81,7 @@ module.exports = {
      * @param next
      * @constructor
      */
-    SaveCart(req, res, next){
+    Save(req, res, next){
         if (req.body.AutoId < 1) {
             sql.adddate('cart', {
                 basicinfoId: req.body.basicinfoId,
