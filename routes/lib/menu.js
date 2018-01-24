@@ -2,7 +2,8 @@
  * Created by momo on 2018/1/21.
  */
 import express from "express";
-import menu from "../../Controller/menu/menu";
+import {menuclass} from "../../Controller/menu/menu";
+const menu = new menuclass();
 let router = express.Router();
 router.post('/getAllmenu', (req, res, next) => {
     menu.getAllmenu(req, res, next);

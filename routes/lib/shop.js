@@ -2,7 +2,8 @@
  * Created by momo on 2018/1/4.
  */
 import express from "express";
-import shop from "../../Controller/shop/shop";
+import { shopclass } from "../../Controller/shop/shop";
+const shop = new shopclass;
 let router = express.Router();
 router.post('/getAllshop', (req, res, next) => {
     shop.getAllshop(req, res, next);

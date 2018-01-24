@@ -13,7 +13,8 @@ let menu = require('./routes/lib/menu');
 let roles = require('./routes/lib/roles');
 let classification = require('./routes/lib/classification');
 let publics = require("./routes/public");
-import user from "./Controller/user/user.js";
+import { userclass } from "./Controller/user/user.js";
+const user = new userclass();
 let app = express();
 
 // view engine setup

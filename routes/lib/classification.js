@@ -2,7 +2,8 @@
  * Created by momo on 2018/1/8.
  */
 import express from "express";
-import classification from "../../Controller/classification/classification";
+import {classificationclass} from "../../Controller/classification/classification";
+const classification = new classificationclass();
 let router = express.Router();
 router.post('/getAllclassification', (req, res, next) => {
     classification.getAllclassification(req, res, next);

@@ -7,7 +7,13 @@ import plugins from "../../public/public";
 import moment from "moment";
 import { Usermodel } from "../../model/user";
 const sql = new query();
-module.exports = {
+export class userclass {
+    /**
+     * 判断是否登录
+     * @param {*} req 
+     * @param {*} res 
+     * @param {*} next 
+     */
     islogin(req, res, next) {
         let token = req.headers['key'];
         if (!token) {
@@ -25,7 +31,13 @@ module.exports = {
                 res.json(e);
             })
         }
-    },
+    }
+    /**
+     * 登录
+     * @param {*} req 
+     * @param {*} res 
+     * @param {*} next 
+     */
     login(req, res, next) {
         let psd = plugins.md5(req.body.password);
         sql.findOne('sys_user', { name: req.body.name }).then(data => {
@@ -57,8 +69,13 @@ module.exports = {
         }).catch(msg => {
             res.json(msg);
         });
-    },
-    //获取所有系统管理员
+    }
+    /**
+     * 获取所有系统管理员
+     * @param {*} req 
+     * @param {*} res 
+     * @param {*} next 
+     */
     getAlluser(req, res, next) {
         sql.findall("sys_user").then(data => {
             let user = plugins.objdelete(['password', 'token'], data);
@@ -71,8 +88,13 @@ module.exports = {
         }).catch(e => {
             res.json(e);
         })
-    },
-    //获取指定系统管理员
+    }
+    /**
+     * 获取指定系统管理员
+     * @param {*} req 
+     * @param {*} res 
+     * @param {*} next 
+     */
     getuser(req, res, next) {
         sql.findOne("sys_user", { AutoId: req.body.AutoId, state: 1 }).then(data => {
             if (data) {
@@ -85,7 +107,7 @@ module.exports = {
         }).catch(e => {
             res.json(e);
         })
-    },
+    }
     /**
      * 删除
      * @param req
@@ -105,7 +127,7 @@ module.exports = {
         }).catch(e => {
             res.json(e);
         })
-    },
+    }
     /**
      * 修改密码
      * @param req
@@ -120,7 +142,7 @@ module.exports = {
         }).catch(e => {
             res.json(e);
         });
-    },
+    }
     /**
      * 注册
      * @param req
@@ -138,7 +160,7 @@ module.exports = {
         }).catch(e => {
             res.json(e);
         })
-    },
+    }
     /**
      * 保存
      * @param req

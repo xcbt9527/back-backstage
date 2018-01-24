@@ -8,13 +8,13 @@ import moment from "moment";
 import { fail } from "assert";
 const uuid = require("uuid/v1");
 const sql = new query();
-module.exports = {
+export class menuclass {
     /**
-     * 获取所有分类
-     * @param req
-     * @param res
-     * @param next
-     */
+      * 获取所有分类
+      * @param req
+      * @param res
+      * @param next
+      */
     getAllmenu(req, res, next) {
         sql.findall("sys_menu", { status: 1 }).then(data => {
             if (data.length > 0) {
@@ -28,7 +28,7 @@ module.exports = {
         }).catch(e => {
             res.json(e);
         })
-    },
+    }
     getTreemenu(req, res, next) {
         sql.findall("sys_menu", { status: 1 }).then(data => {
             let menumodel = plugins.objdelete(['lastTime', 'Modifier', 'status'], data);
@@ -67,7 +67,7 @@ module.exports = {
         }).catch(e => {
             res.json(e);
         })
-    },
+    }
     /**
      * 获取单条菜单
      * @param req
@@ -84,7 +84,7 @@ module.exports = {
         }).catch(e => {
             res.json(e);
         })
-    },
+    }
     /**
      * 删除分类
      * @param req
@@ -102,7 +102,7 @@ module.exports = {
         }).catch(e => {
             res.json(e);
         })
-    },
+    }
     /**
      * 添加菜单栏
      * @param req

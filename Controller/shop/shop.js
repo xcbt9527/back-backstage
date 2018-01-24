@@ -7,13 +7,13 @@ import plugins from "../../public/public";
 import moment from "moment";
 import { shopmodel } from "../../model/shop";
 const sql = new query();
-module.exports = {
+export class shopclass {
     /**
-     * 获取所有商品信息
-     * @param req
-     * @param res
-     * @param next
-     */
+       * 获取所有商品信息
+       * @param req
+       * @param res
+       * @param next
+       */
     getAllshop(req, res, next) {
         sql.findall("shop", { state: 1 }).then(data => {
             data.forEach(e => {
@@ -23,13 +23,13 @@ module.exports = {
         }).catch(e => {
             res.json(e);
         })
-    },
+    }
     /**
-     * 获取单条商品信息
-     * @param req
-     * @param res
-     * @param next
-     */
+   * 获取单条商品信息
+   * @param req
+   * @param res
+   * @param next
+   */
     getshop(req, res, next) {
         sql.findOne("shop", { AutoId: req.body.AutoId }).then(data => {
             if (data) {
@@ -41,28 +41,28 @@ module.exports = {
         }).catch(e => {
             res.json(e);
         })
-    },
+    }
     /**
-     * 更改商品状态
-     * @param req
-     * @param res
-     * @param next
-     * @constructor
-     */
+    * 更改商品状态
+    * @param req
+    * @param res
+    * @param next
+    * @constructor
+    */
     DeleteRecord(req, res, next) {
         sql.update("shop", { state: 0 }, { AutoId: req.body.AutoId }).then(data => {
             res.json(plugins.write(1, null, '更改状态成功'));
         }).catch(e => {
             res.json(e);
         })
-    },
+    }
     /**
-     * 保存
-     * @param req
-     * @param res
-     * @param next
-     * @constructor
-     */
+    * 保存
+    * @param req
+    * @param res
+    * @param next
+    * @constructor
+    */
     SaveRecord(req, res, next) {
         let newtime = moment().format('YYYY-MM-DD hh:mm:ss');
         let imgname = plugins.md5(newtime + 'picture');

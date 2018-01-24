@@ -8,19 +8,19 @@
 import query from "../../sql/query";
 import plugins from "../../public/public";
 import moment from "moment";
-import {classificationmodel} from "../../model/classification";
-import {fail} from "assert";
+import { classificationmodel } from "../../model/classification";
+import { fail } from "assert";
 const sql = new query();
-module.exports = {
+export class classificationclass {
     /**
-     * 获取所有分类
-     * @param req
-     * @param res
-     * @param next
-     */
+        * 获取所有分类
+        * @param req
+        * @param res
+        * @param next
+        */
     getAllclassification(req, res, next) {
-        sql.findall("classification", {status: 1}).then(data => {
-            if (data.length>0) {
+        sql.findall("classification", { status: 1 }).then(data => {
+            if (data.length > 0) {
                 let classification = plugins.objdelete(['lastTime', 'Modifier', 'status'], data);
                 let tree = plugins.ArrConversionTree(classification, 'AutoId', 'upperlevel');
                 res.json(plugins.write(0, tree, null));
@@ -30,7 +30,7 @@ module.exports = {
         }).catch(e => {
             res.json(e);
         })
-    },
+    }
     /**
      * 获取单条分类
      * @param req
@@ -39,7 +39,7 @@ module.exports = {
      */
     getclassification(req, res, next) {
         //SELECT * FROM shop.sys_user where name = 'momo'
-        sql.findOne("classification", {AutoId: req.body.AutoId, status: 1}).then(data => {
+        sql.findOne("classification", { AutoId: req.body.AutoId, status: 1 }).then(data => {
             if (data) {
                 res.json(plugins.write(0, data, null));
             } else {
@@ -48,7 +48,7 @@ module.exports = {
         }).catch(e => {
             res.json(e);
         })
-    },
+    }
     /**
      * 删除分类
      * @param req
@@ -61,12 +61,12 @@ module.exports = {
             status: 0,
             lastTime: moment().format('YYYY-MM-DD hh:mm:ss'),
             Modifier: req.body.account
-        }, {AutoId: req.body.AutoId}).then(data => {
+        }, { AutoId: req.body.AutoId }).then(data => {
             res.json(plugins.write(1, null, '删除成功'));
         }).catch(e => {
             res.json(e);
         })
-    },
+    }
     /**
      * 添加分类
      * @param req
@@ -96,7 +96,7 @@ module.exports = {
                 lastTime: moment().format('YYYY-MM-DD hh:mm:ss'),
                 Modifier: req.body.account,
                 Code: req.body.Code
-            }, {AutoId: req.body.AutoId}).then(data => {
+            }, { AutoId: req.body.AutoId }).then(data => {
                 res.json(plugins.write(1, null, '修改成功'));
             }).catch(e => {
                 res.json(e);

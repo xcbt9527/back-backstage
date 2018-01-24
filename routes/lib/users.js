@@ -1,5 +1,6 @@
 import express from "express";
-import user from "../../Controller/user/user";
+import { userclass } from "../../Controller/user/user";
+const user = new userclass();
 let router = express.Router();
 router.post('/login', (req, res, next) => {
     user.login(req, res, next);
