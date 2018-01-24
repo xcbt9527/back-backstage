@@ -22,6 +22,18 @@ export class classificationclass {
         sql.findall("classification", { status: 1 }).then(data => {
             if (data.length > 0) {
                 let classification = plugins.objdelete(['lastTime', 'Modifier', 'status'], data);
+                res.json(plugins.write(0, classification, null));
+            } else {
+                res.json(plugins.write(0, [], null));
+            }
+        }).catch(e => {
+            res.json(e);
+        })
+    }
+    getTreeclassification(req, res, next) {
+        sql.findall("classification", { status: 1 }).then(data => {
+            if (data.length > 0) {
+                let classification = plugins.objdelete(['lastTime', 'Modifier', 'status'], data);
                 let tree = plugins.ArrConversionTree(classification, 'AutoId', 'upperlevel');
                 res.json(plugins.write(0, tree, null));
             } else {
