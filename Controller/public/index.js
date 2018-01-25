@@ -11,6 +11,7 @@ export class publiclib {
         * @param next
         */
     getuid(req, res, next) {
+        console.log(2);
         res.json(plugins.write(0, uuid(), null));
     }
 }

@@ -1,7 +1,8 @@
 import express from "express";
-import index from "../Controller/public/index";
+import {publiclib} from "../Controller/public/index";
+const src = new publiclib();
 let router = express.Router();
 router.post('/getuid', (req, res, next) => {
-    index.getuid(req, res, next);
+    src.getuid(req, res, next);
 });
 module.exports = router;

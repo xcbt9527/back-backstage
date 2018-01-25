@@ -93,7 +93,6 @@ class mysqlquery {
         }
         or = or ? or : ';';
         let sql = "SELECT * FROM " + prefix + table + ' ' + _WHERE + or;
-        console.log(sql);
         return new Promise((resolve, reject) => {
             conn.query(sql, function (err, data) {
                 if (err) {
