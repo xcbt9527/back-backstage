@@ -53,8 +53,7 @@ export class notepad {
      */
     Delect(req, res, next) {
         sql.update("notepad", {
-            status: req.body.status,
-            lastTime: moment().format('YYYY-MM-DD hh:mm:ss'),
+            status: 0,
             Modifier: req.body.account
         }, { AutoId: req.body.AutoId }).then(data => {
             res.json(plugins.write(1, null, '更改成功'));
