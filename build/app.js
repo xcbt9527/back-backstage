@@ -15,6 +15,9 @@ var roles = require('./routes/lib/roles');
 var classification = require('./routes/lib/classification');
 var publics = require("./routes/public");
 var notepad = require("./routes/lib/notepad");
+var bookframework = require("./routes/lib/bookframework/bookframework");
+var chapter = require("./routes/lib/bookframework/chapter");
+var exercuses = require("./routes/lib/bookframework/exercuses");
 var user_js_1 = require("./Controller/user/user.js");
 var user = new user_js_1.userclass();
 var app = express();
@@ -45,6 +48,9 @@ app.use('/api/classification/', classification); //分类
 app.use('/api/menu/', menu); //菜单栏
 app.use('/api/roles/', roles); //权限
 app.use('/api/notepad/', notepad); //记事本
+app.use('/api/bookframework/', bookframework); //书本类型
+app.use('/api/chapter/', chapter); //章节
+app.use('/api/exercuses/', exercuses); //练习题
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     var err = new Error('Not Found');

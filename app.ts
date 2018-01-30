@@ -14,7 +14,10 @@ let roles = require('./routes/lib/roles');
 let classification = require('./routes/lib/classification');
 let publics = require("./routes/public");
 let notepad = require("./routes/lib/notepad");
-import { userclass } from "./Controller/user/user.js";
+let bookframework = require("./routes/lib/bookframework/bookframework");
+let chapter = require("./routes/lib/bookframework/chapter");
+let exercuses = require("./routes/lib/bookframework/exercuses");
+import {userclass} from "./Controller/user/user.js";
 const user = new userclass();
 let app = express();
 
@@ -26,9 +29,9 @@ app.set('view engine', 'html');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'dist'), { maxAge: 1000 * 60 * 60 }));
+app.use(express.static(path.join(__dirname, 'dist'), {maxAge: 1000 * 60 * 60}));
 app.use(function (req, res, next) {
     if (req.url === '/api/user/login' || req.url === '/api/user/register') {
         next();
@@ -46,6 +49,9 @@ app.use('/api/classification/', classification);   //分类
 app.use('/api/menu/', menu);   //菜单栏
 app.use('/api/roles/', roles);   //权限
 app.use('/api/notepad/', notepad);   //记事本
+app.use('/api/bookframework/', bookframework);   //书本类型
+app.use('/api/chapter/', chapter);   //章节
+app.use('/api/exercuses/', exercuses);   //练习题
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     let err = new Error('Not Found');

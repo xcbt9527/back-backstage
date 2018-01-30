@@ -8,9 +8,9 @@ import path from "path";
 module.exports = {
     /**
      * 输出状态
-     * @param {*状态} status 
-     * @param {*输出的data数据} data 
-     * @param {*提醒信息} msg 
+     * @param {*状态} status
+     * @param {*输出的data数据} data
+     * @param {*提醒信息} msg
      */
     write(status, data, msg) {
         switch (status) {
@@ -32,7 +32,7 @@ module.exports = {
                 msg = '登录成功';
                 break;
         }
-        return { status: status, msg: msg, data: data };
+        return {status: status, msg: msg, data: data};
     },
     /**
      * MD5加密
@@ -44,8 +44,8 @@ module.exports = {
     },
     /**
      * 替换对象数据
-     * @param {*需删除对象：Obj or Arr} obj1 
-     * @param {*原始对象：Obj or Arr} obj2 
+     * @param {*需删除对象：Obj or Arr} obj1
+     * @param {*原始对象：Obj or Arr} obj2
      */
     hasboj(obj1, obj2) {
         if (typeof obj1 == 'object') {  //判断是否对象
@@ -75,8 +75,8 @@ module.exports = {
     },
     /**
      * 删除不必要字段
-     * @param {*需删除对象：Obj or Arr} obj1 
-     * @param {*原始对象：Obj or Arr} obj2 
+     * @param {*需删除对象：Obj or Arr} obj1
+     * @param {*原始对象：Obj or Arr} obj2
      */
     objdelete(obj1, obj2) {
         let obj = null;     //返回变量（数组或对象）
@@ -178,7 +178,7 @@ module.exports = {
     },
     /**
      * 删除图片
-     * @param {*相对路径地址（img下面的文件夹）} url 
+     * @param {*相对路径地址（img下面的文件夹）} url
      * @returns {boolean}
      */
     rmdirImg(url) {
@@ -196,9 +196,9 @@ module.exports = {
     },
     /**
      * 遍历数组获取树结构
-     * @param {*需做树结构数组} data 
-     * @param {*唯一ID} upperlevel 
-     * @param {*树结构上级ID} upperlevel 
+     * @param {*需做树结构数组} data
+     * @param {*唯一ID} upperlevel
+     * @param {*树结构上级ID} upperlevel
      */
     ArrConversionTree(data, level, upperlevel) {
         let map = {};
@@ -218,4 +218,46 @@ module.exports = {
         });
         return val;
     },
+    /**
+     * 升序排序
+     * @param propertyName
+     * @returns {Function}
+     */
+    compareUp(propertyName) {
+        if ((typeof data[0][propertyName]) != "number") { // 属性值为非数字
+            return function (object1, object2) {
+                var value1 = object1[propertyName];
+                var value2 = object2[propertyName];
+                return value1.localeCompare(value2);
+            }
+        }
+        else {
+            return function (object1, object2) { // 属性值为数字
+                var value1 = object1[propertyName];
+                var value2 = object2[propertyName];
+                return value1 - value2;
+            }
+        }
+    },
+    /**
+     * 降序排序
+     * @param propertyName
+     * @returns {Function}
+     */
+    compareDown(propertyName) {
+        if ((typeof data[0][propertyName]) != "number") { // 属性值为非数字
+            return function (object1, object2) {
+                var value1 = object1[propertyName];
+                var value2 = object2[propertyName];
+                return value2.localeCompare(value1);
+            }
+        }
+        else {
+            return function (object1, object2) { // 属性值为数字
+                var value1 = object1[propertyName];
+                var value2 = object2[propertyName];
+                return value2 - value1;
+            }
+        }
+    }
 }
