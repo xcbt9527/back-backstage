@@ -5,7 +5,7 @@ let mysql = require('mysql')
 let models = require('./db')
 var util = require('util');
 let conn = mysql.createConnection(models.mysql);  //连接数据库
-let prefix = 'shop.';
+let prefix = 'momo.';
 let json = require("../public/public");
 conn.connect();
 class mysqlquery {

@@ -4,9 +4,9 @@
 // 数据库连接配置
 module.exports = {
     mysql: {
-        host: '47.94.157.0',
-        user: 'admin',
-        password: '123456',
+        host: '47.104.165.206',
+        user: 'root',
+        password: '1234567890',
         database: 'mysql',
         port: '3306'
     }
