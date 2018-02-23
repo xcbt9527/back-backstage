@@ -43,7 +43,7 @@ class mysqlquery {
             for (let k in where) {
                 let model = where[k].toString();
                 if ((model.indexOf('<') === -1) && (model.indexOf('>') === -1) && (model.indexOf('<=') === -1) && (model.indexOf('>=') === -1)) {
-                    _WHERE += k + " in (" + where[k] + ") AND ";
+                    _WHERE += k + "='" + where[k] + "' AND ";
                 } else {
                     _WHERE += k + where[k] + " AND ";
                 }
