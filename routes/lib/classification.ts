@@ -15,7 +15,7 @@ router.post('/getAllclassification', (req, res, next) => {
  * 获树状结构
  */
 router.post('/getTreeclassification', (req, res, next) => {
-    classification.getAll(req, res, next);
+    classification.getTree(req, res, next);
 });
 /**
  * 获取这此条分类
