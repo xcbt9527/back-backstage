@@ -2,11 +2,14 @@
  * Created by baird on 18/1/30.
  */
 import express from "express";
-import {chapterclass} from "../../../Controller/bookController/chapter/chapter.ts";
+import { chapterclass } from "../../../Controller/bookController/chapter/chapter.ts";
 const src = new chapterclass();
 let router = express.Router();
 router.post('/getAll', (req, res, next) => {
     src.getAll(req, res, next);
+});
+router.post('/getAlltree', (req, res, next) => {
+    src.getTree(req, res, next);
 });
 router.post('/getOne', (req, res, next) => {
     src.getOne(req, res, next);

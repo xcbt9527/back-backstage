@@ -2,7 +2,7 @@
  * Created by baird on 18/1/30.
  */
 import express from "express";
-import {bookframeworkclass} from "../../../Controller/bookController/bookframework/bookframework.ts";
+import { bookframeworkclass } from "../../../controller/bookcontroller/bookframework/bookframework.ts";
 const src = new bookframeworkclass();
 let router = express.Router();
 router.post('/getAll', (req, res, next) => {

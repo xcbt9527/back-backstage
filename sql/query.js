@@ -42,9 +42,9 @@ class mysqlquery {
             //循环获取查询条件
             for (let k in where) {
                 let model = where[k].toString();
-                if((model.indexOf('<')===-1)&&(model.indexOf('>')===-1)&&(model.indexOf('<=')===-1)&&(model.indexOf('>=')===-1)){
-                    _WHERE += k + "='" + where[k] + "' AND ";
-                }else{
+                if ((model.indexOf('<') === -1) && (model.indexOf('>') === -1) && (model.indexOf('<=') === -1) && (model.indexOf('>=') === -1)) {
+                    _WHERE += k + " in (" + where[k] + ") AND ";
+                } else {
                     _WHERE += k + where[k] + " AND ";
                 }
             }
@@ -81,9 +81,9 @@ class mysqlquery {
             //循环获取查询条件
             for (let k in where) {
                 let model = where[k].toString();
-                if((model.indexOf('<')===-1)&&(model.indexOf('>')===-1)&&(model.indexOf('<=')===-1)&&(model.indexOf('>=')===-1)){
-                    _WHERE += k + "='" + where[k] + "' AND ";
-                }else{
+                if ((model.indexOf('<') === -1) && (model.indexOf('>') === -1) && (model.indexOf('<=') === -1) && (model.indexOf('>=') === -1)) {
+                    _WHERE += k + " in (" + where[k] + ") AND ";
+                } else {
                     _WHERE += k + where[k] + " AND ";
                 }
             }

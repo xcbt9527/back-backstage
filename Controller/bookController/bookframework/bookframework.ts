@@ -5,20 +5,33 @@
 import query from "../../../sql/query.js";
 import plugins from "../../../public/public.js";
 import moment from "moment";
+import { chapterclass } from "../chapter/chapter.ts";
+import { resolve } from "url";
 const sql = new query();
+const chaptersrc = new chapterclass();
 export class bookframeworkclass {
     /**
-     * 获取所有
+     * 获取所有书本架构
      * @param req
      * @param res
      * @param next
      */
     getAll(req, res, next) {
-        sql.findall("bookframework", {status: 1}).then(data => {
+        sql.findall("bookframework", { status: 1 }).then(data => {
             if (data.length > 0) {
-                let Arr = plugins.objdelete(['createId', 'createtime'], data);
-                Arr.sort(plugins.compareUp('order'));
-                res.json(plugins.write(0, Arr, null));
+                let Arr = plugins.objdelete(['createId', 'createtime', 'modificationtime', 'Modifier', 'chapterId', 'exercisesId'], data);
+                chaptersrc.getchapter(Arr).then(ret => {
+                    Arr = Arr.map(m => {
+                        m.children =[];
+                        ret.forEach(q => {
+                            if (m.AutoId === q.bookId) {
+                                m.children.push(q);
+                            }
+                        })
+                        return m;
+                    })
+                    res.json(plugins.write(0, Arr, null));
+                })
             } else {
                 res.json(plugins.write(0, [], null));
             }
@@ -28,10 +41,9 @@ export class bookframeworkclass {
     }
 
     getTree(req, res, next) {
-        sql.findall("bookframework", {status: 1}).then(data => {
+        sql.findall("bookframework", { status: 1 }).then(data => {
             if (data.length > 0) {
-                let Arr = plugins.objdelete(['createId', 'createtime'], data);
-                Arr.sort(plugins.compareUp('order'));
+                let Arr = plugins.objdelete(['createId', 'createtime', 'modificationtime', 'Modifier', 'chapterId', 'exercisesId'], data);
                 let tree = plugins.ArrConversionTree(Arr, 'AutoId', 'upperlevel');
                 res.json(plugins.write(0, tree, null));
             } else {
@@ -49,7 +61,7 @@ export class bookframeworkclass {
      * @param next
      */
     getOne(req, res, next) {
-        sql.findOne("bookframework", {AutoId: req.body.AutoId, status: 1}).then(data => {
+        sql.findOne("bookframework", { AutoId: req.body.AutoId, status: 1 }).then(data => {
             if (data) {
                 res.json(plugins.write(0, data, null));
             } else {
@@ -72,7 +84,7 @@ export class bookframeworkclass {
             status: 0,
             Modifier: req.body.account,
             modificationtime: moment().format('YYYY-MM-DD hh:mm:ss')
-        }, {AutoId: req.body.AutoId}).then(data => {
+        }, { AutoId: req.body.AutoId }).then(data => {
             res.json(plugins.write(1, null, '删除成功'));
         }).catch(e => {
             res.json(e);
@@ -94,7 +106,9 @@ export class bookframeworkclass {
                 upperlevel: req.body.upperlevel,
                 createtime: moment().format('YYYY-MM-DD hh:mm:ss'),
                 createId: req.body.account,
-                order: req.body.order,
+                modificationtime: moment().format('YYYY-MM-DD hh:mm:ss'),
+                Modifier: req.body.account,
+                orderId: req.body.order > 0 ? req.body.order : 0,
             }).then(data => {
                 res.json(plugins.write(1, null, '添加成功'));
             }).catch(e => {
@@ -107,8 +121,9 @@ export class bookframeworkclass {
                 upperlevel: req.body.upperlevel,
                 modificationtime: moment().format('YYYY-MM-DD hh:mm:ss'),
                 Modifier: req.body.account,
-                order: req.body.order,
-            }, {AutoId: req.body.AutoId}).then(data => {
+                orderId: req.body.order > 0 ? req.body.order : 0,
+
+            }, { AutoId: req.body.AutoId }).then(data => {
                 res.json(plugins.write(1, null, '修改成功'));
             }).catch(e => {
                 res.json(e);
